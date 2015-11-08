@@ -18,47 +18,42 @@ function resolvePath(opts, node, url) {
     return path.resolve(root, url);
 }
 
-function defineLoad(promises, svgs, atrule, opts) {
+function defineLoad(result, promises, svgs, atrule, opts) {
     atrule.remove();
 
     var data = ast2data(atrule);
     var params = valueParser(atrule.params).nodes;
     if (!data ||
+        params.length !== 3 ||
         params[0].type !== 'word' ||
         params[1].type !== 'space' ||
         params[2].type !== 'function' ||
         params[2].value !== 'url' ||
         params[2].nodes.length === 0
     ) {
-        atrule.warn('Invalid @svg-load definition');
-        return;
+        return atrule.warn(result, 'Invalid @svg-load definition');
     }
 
     var name = params[0].value;
     var url = resolvePath(opts, atrule, params[2].nodes[0].value);
-
-    if (svgs[name]) {
-        atrule.warn('`' + name + '` svg already defined');
-    }
-    var promise = loadSVG(url, data).then(function (result) {
-        if (result) {
-            svgs[name] = result;
+    var promise = loadSVG(url, data).then(function (svg) {
+        if (svg) {
+            svgs[name] = svg;
         } else {
-            atrule.warn('Invalid svg in `' + url + '`');
+            return atrule.warn(result, 'Invalid svg in `' + url + '`');
         }
     });
 
     promises.push(promise);
 }
 
-function insertLoad(promises, decl, opts) {
+function insertLoad(result, promises, decl, opts) {
     decl.value.walk(function (node) {
         if (node.type !== 'function' || node.value !== 'svg-load') {
             return;
         }
         if (!node.nodes.length) {
-            decl.warn('`' + node.value + '` function should not be empty');
-            return;
+            return decl.warn(result, '`' + node.value + '` function should not be empty');
         }
         var url;
         var params = {};
@@ -88,8 +83,7 @@ function insertLoad(promises, decl, opts) {
                 node.nodes[i + 2].value !== ':' ||
                 node.nodes[i + 3].type !== 'word'
             ) {
-                decl.warn('Invalid svg-load() definition');
-                return;
+                return decl.warn(result, 'Invalid svg-load() definition');
             }
             params[node.nodes[i + 1].value] = node.nodes[i + 3].value;
             i += 4;
@@ -99,27 +93,25 @@ function insertLoad(promises, decl, opts) {
             type: 'string',
             quote: '\''
         }];
-        var promise = loadSVG(url, { root: params }).then(function (result) {
-            node.nodes[0].value = result;
+        var promise = loadSVG(url, { root: params }).then(function (svg) {
+            node.nodes[0].value = svg;
         });
         promises.push(promise);
     });
 }
 
-function insertInline(svgs, decl) {
+function insertInline(result, svgs, decl) {
     decl.value.walk(function (node) {
         if (node.type !== 'function' || node.value !== 'svg-inline') {
             return;
         }
         if (!node.nodes.length) {
-            decl.warn('`' + node.value + '` function should not be empty');
-            return;
+            return decl.warn(result, '`' + node.value + '` function should not be empty');
         }
 
         var name = node.nodes[0].value;
         if (!svgs[name]) {
-            decl.warn('`' + name + '` svg is not defined');
-            return;
+            return decl.warn(result, '`' + name + '` svg is not defined');
         }
 
         node.value = 'url';
@@ -134,7 +126,7 @@ function insertInline(svgs, decl) {
 module.exports = postcss.plugin('postcss-inline-svg', function (opts) {
     opts = opts || {};
 
-    return function (css) {
+    return function (css, result) {
         var promises = [];
         var svgs = {};
         var decls = [];
@@ -142,14 +134,14 @@ module.exports = postcss.plugin('postcss-inline-svg', function (opts) {
         css.walk(function (node) {
             if (node.type === 'atrule') {
                 if (node.name === 'svg-load') {
-                    defineLoad(promises, svgs, node, opts);
+                    defineLoad(result, promises, svgs, node, opts);
                 }
             } else if (node.type === 'decl') {
                 if (~node.value.indexOf('svg-load(') ||
                     ~node.value.indexOf('svg-inline(')
                 ) {
                     node.value = valueParser(node.value);
-                    insertLoad(promises, node, opts);
+                    insertLoad(result, promises, node, opts);
                     decls.push(node);
                 }
             }
@@ -157,7 +149,7 @@ module.exports = postcss.plugin('postcss-inline-svg', function (opts) {
 
         return Promise.all(promises).then(function () {
             decls.forEach(function (decl) {
-                insertInline(svgs, decl, opts);
+                insertInline(result, svgs, decl, opts);
                 decl.value = decl.value.toString();
             });
         });
