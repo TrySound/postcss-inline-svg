@@ -45,14 +45,41 @@ function insertLoad(promises, decl) {
             decl.warn('`' + node.value + '` function should not be empty');
             return;
         }
-        var url = valueParser.stringify(node.nodes);
-        var promise = loadSVG(url).then(function (result) {
-            node.value = 'url';
-            node.nodes = [{
-                type: 'string',
-                quote: '\'',
-                value: result
-            }];
+        var url;
+        var params = {};
+        var i = 0;
+        var max = node.nodes.length;
+        var item;
+        while (i < max) {
+            item = node.nodes[i];
+            if (item.type === 'div' && item.value === ',') {
+                url = valueParser.stringify(node.nodes.slice(0, i));
+                break;
+            }
+            i += 1;
+        }
+        while (i < max) {
+            if (i + 3 >= max ||
+                node.nodes[i].type !== 'div' ||
+                node.nodes[i].value !== ',' ||
+                node.nodes[i + 1].type !== 'word' ||
+                node.nodes[i + 2].type !== 'div' ||
+                node.nodes[i + 2].value !== ':' ||
+                node.nodes[i + 3].type !== 'word'
+            ) {
+                decl.warn('Invalid svg-load() definition');
+                return;
+            }
+            params[node.nodes[i + 1].value] = node.nodes[i + 3].value;
+            i += 4;
+        }
+        node.value = 'url';
+        node.nodes = [{
+            type: 'string',
+            quote: '\''
+        }];
+        var promise = loadSVG(url, { root: params }).then(function (result) {
+            node.nodes[0].value = result;
         });
         promises.push(promise);
     });

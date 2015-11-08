@@ -9,25 +9,24 @@
 ```css
 @svg-load nav url(img/nav.svg) {
     fill: #cfc;
-    color: #000;
     path:nth-child(2) {
-        fill: currentColor;
+        fill: #ff0;
     }
 }
 .nav {
     background: svg-inline(nav);
 }
 .up {
-    background: svg-load(img/arrow-up.svg);
+    background: svg-load(img/arrow-up.svg, fill: #000, stroke: #fff);
 }
 ```
 
 ```css
 .nav {
-    background: url(data:image/svg+xml,charset=utf-8,...);
+    background: url('data:image/svg+xml,charset=utf-8,<svg fill="#cfc"><path d="..."/><path d="..." fill="#ff0"/><path d="..."/></svg>');
 }
 .up {
-    background: url(data:image/svg+xml,charset=utf-8,...);
+    background: url('data:image/svg+xml,charset=utf-8,<svg fill="#000" stroke="#fff">...</svg>');
 }
 ```
 
