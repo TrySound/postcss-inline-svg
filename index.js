@@ -53,7 +53,12 @@ function insertLoad(result, promises, decl, opts) {
             return;
         }
         if (!node.nodes.length) {
-            return decl.warn(result, '`' + node.value + '` function should not be empty');
+            decl.warn(result, [
+                '`',
+                node.value,
+                '` function should not be empty'
+            ].join(''));
+            return;
         }
         var url;
         var params = {};
@@ -83,7 +88,8 @@ function insertLoad(result, promises, decl, opts) {
                 node.nodes[i + 2].value !== ':' ||
                 node.nodes[i + 3].type !== 'word'
             ) {
-                return decl.warn(result, 'Invalid svg-load() definition');
+                decl.warn(result, 'Invalid svg-load() definition');
+                return;
             }
             params[node.nodes[i + 1].value] = node.nodes[i + 3].value;
             i += 4;
@@ -106,12 +112,18 @@ function insertInline(result, svgs, decl) {
             return;
         }
         if (!node.nodes.length) {
-            return decl.warn(result, '`' + node.value + '` function should not be empty');
+            decl.warn(result, [
+                '`',
+                node.value,
+                '` function should not be empty'
+            ].join(''));
+            return;
         }
 
         var name = node.nodes[0].value;
         if (!svgs[name]) {
-            return decl.warn(result, '`' + name + '` svg is not defined');
+            decl.warn(result, '`' + name + '` svg is not defined');
+            return;
         }
 
         node.value = 'url';
