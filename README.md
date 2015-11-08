@@ -33,7 +33,16 @@
 ## Usage
 
 ```js
-postcss([ require('postcss-inline-svg') ])
+postcss([ require('postcss-inline-svg')(options) ])
 ```
+
+### Options
+
+#### options.path
+
+Path which will resolve url
+
+Default: `false` - path will be relative to source file if it was specified
+
 
 See [PostCSS] docs for examples for your environment.
