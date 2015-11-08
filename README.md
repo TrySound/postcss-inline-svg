@@ -27,7 +27,7 @@
     background: url(data:image/svg+xml,charset=utf-8,...);
 }
 .up {
-    background: svg-load(data:image/svg+xml,charset=utf-8,...);
+    background: url(data:image/svg+xml,charset=utf-8,...);
 }
 ```
 
