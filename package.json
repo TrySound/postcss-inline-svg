@@ -37,6 +37,6 @@
   "scripts": {
     "lint": "eslint index.js lib test",
     "pretest": "npm run lint",
-    "test": "ava test/index.js && ava test/apply-data.js && ava test/ast2data.js"
+    "test": "ava"
   }
 }
