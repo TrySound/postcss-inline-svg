@@ -36,6 +36,8 @@
 postcss([ require('postcss-inline-svg')(options) ])
 ```
 
+See [PostCSS] docs for examples for your environment.
+
 ### Options
 
 #### options.path
@@ -43,6 +45,3 @@ postcss([ require('postcss-inline-svg')(options) ])
 Path which will resolve url
 
 Default: `false` - path will be relative to source file if it was specified
-
-
-See [PostCSS] docs for examples for your environment.
