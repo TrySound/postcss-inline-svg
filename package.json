@@ -1,6 +1,6 @@
 {
   "name": "postcss-inline-svg",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "PostCSS plugin to inline svg",
   "keywords": [
     "postcss",
