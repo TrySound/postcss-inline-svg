@@ -1,4 +1,4 @@
-# PostCSS Inline Svg [![Build Status][ci-img]][ci]
+# PostCSS Inline SVG [![Build Status][ci-img]][ci]
 
 [PostCSS] plugin to inline svg.
 
@@ -23,10 +23,10 @@
 
 ```css
 .nav {
-    background: url('data:image/svg+xml,charset=utf-8,<svg fill="#cfc"><path d="..."/><path d="..." fill="#ff0"/><path d="..."/></svg>');
+    background: url('data:image/svg+xml;charset=utf-8,<svg fill="#cfc"><path d="..."/><path d="..." fill="#ff0"/><path d="..."/></svg>');
 }
 .up {
-    background: url('data:image/svg+xml,charset=utf-8,<svg fill="#000" stroke="#fff">...</svg>');
+    background: url('data:image/svg+xml;charset=utf-8,<svg fill="#000" stroke="#fff">...</svg>');
 }
 ```
 
