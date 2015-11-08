@@ -1,9 +1,24 @@
+var path = require('path');
 var postcss = require('postcss');
 var valueParser = require('postcss-value-parser');
 var loadSVG = require('./lib/load-svg');
 var ast2data = require('./lib/ast2data');
 
-function defineLoad(promises, svgs, atrule) {
+function resolvePath(opts, node, url) {
+    var root;
+    if (!opts.path) {
+        if (node.source.input.file) {
+            root = path.dirname(node.source.input.file);
+        } else {
+            root = process.cwd();
+        }
+    } else {
+        root = path.resolve(process.cwd(), opts.path);
+    }
+    return path.resolve(root, url);
+}
+
+function defineLoad(promises, svgs, atrule, opts) {
     atrule.remove();
 
     var data = ast2data(atrule);
@@ -20,7 +35,7 @@ function defineLoad(promises, svgs, atrule) {
     }
 
     var name = params[0].value;
-    var url = params[2].nodes[0].value;
+    var url = resolvePath(opts, atrule, params[2].nodes[0].value);
 
     if (svgs[name]) {
         atrule.warn('`' + name + '` svg already defined');
@@ -36,7 +51,7 @@ function defineLoad(promises, svgs, atrule) {
     promises.push(promise);
 }
 
-function insertLoad(promises, decl) {
+function insertLoad(promises, decl, opts) {
     decl.value.walk(function (node) {
         if (node.type !== 'function' || node.value !== 'svg-load') {
             return;
@@ -50,14 +65,20 @@ function insertLoad(promises, decl) {
         var i = 0;
         var max = node.nodes.length;
         var item;
-        while (i < max) {
-            item = node.nodes[i];
-            if (item.type === 'div' && item.value === ',') {
-                url = valueParser.stringify(node.nodes.slice(0, i));
-                break;
-            }
+        if (node.nodes[0].type === 'string') {
+            url = node.nodes[0].value;
             i += 1;
+        } else {
+            while (i < max) {
+                item = node.nodes[i];
+                if (item.type === 'div' && item.value === ',') {
+                    break;
+                }
+                i += 1;
+            }
+            url = valueParser.stringify(node.nodes.slice(0, i));
         }
+        url = resolvePath(opts, decl, url);
         while (i < max) {
             if (i + 3 >= max ||
                 node.nodes[i].type !== 'div' ||
@@ -121,14 +142,14 @@ module.exports = postcss.plugin('postcss-inline-svg', function (opts) {
         css.walk(function (node) {
             if (node.type === 'atrule') {
                 if (node.name === 'svg-load') {
-                    defineLoad(promises, svgs, node);
+                    defineLoad(promises, svgs, node, opts);
                 }
             } else if (node.type === 'decl') {
                 if (~node.value.indexOf('svg-load(') ||
                     ~node.value.indexOf('svg-inline(')
                 ) {
                     node.value = valueParser(node.value);
-                    insertLoad(promises, node);
+                    insertLoad(promises, node, opts);
                     decls.push(node);
                 }
             }
@@ -136,7 +157,7 @@ module.exports = postcss.plugin('postcss-inline-svg', function (opts) {
 
         return Promise.all(promises).then(function () {
             decls.forEach(function (decl) {
-                insertInline(svgs, decl);
+                insertInline(svgs, decl, opts);
                 decl.value = decl.value.toString();
             });
         });
