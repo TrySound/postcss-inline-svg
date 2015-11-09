@@ -36,7 +36,7 @@ function defineLoad(result, promises, svgs, atrule, opts) {
 
     var name = params[0].value;
     var url = resolvePath(opts, atrule, params[2].nodes[0].value);
-    var promise = loadSVG(url, data).then(function (svg) {
+    var promise = loadSVG(url, data, opts.encode).then(function (svg) {
         if (svg) {
             svgs[name] = svg;
         } else {
@@ -97,9 +97,11 @@ function insertLoad(result, promises, decl, opts) {
         node.value = 'url';
         node.nodes = [{
             type: 'string',
-            quote: '\''
+            quote: '"'
         }];
-        var promise = loadSVG(url, { root: params }).then(function (svg) {
+        var promise = loadSVG(url, {
+            root: params
+        }, opts.encode).then(function (svg) {
             node.nodes[0].value = svg;
         });
         promises.push(promise);
@@ -129,7 +131,7 @@ function insertInline(result, svgs, decl) {
         node.value = 'url';
         node.nodes = [{
             type: 'string',
-            quote: '\'',
+            quote: '"',
             value: svgs[name]
         }];
     });
@@ -137,6 +139,7 @@ function insertInline(result, svgs, decl) {
 
 module.exports = postcss.plugin('postcss-inline-svg', function (opts) {
     opts = opts || {};
+    opts.encode = opts.encode !== false;
 
     return function (css, result) {
         var promises = [];
