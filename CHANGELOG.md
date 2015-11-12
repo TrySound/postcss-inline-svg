@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1
+
+* Improve documentation
+
 ## 1.1.0
 
 * Fix ie strict data uri by adding custom url encode

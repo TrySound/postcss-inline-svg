@@ -23,10 +23,10 @@
 
 ```css
 .nav {
-    background: url('data:image/svg+xml;charset=utf-8,<svg fill="#cfc"><path d="..."/><path d="..." fill="#ff0"/><path d="..."/></svg>');
+    background: url("data:image/svg+xml;charset=utf-8,%3Csvg fill='%23cfc'%3E%3Cpath d='...'/%3E%3Cpath d='...' fill='%23ff0'/%3E%3Cpath d='...'/%3E%3C/svg%3E');
 }
 .up {
-    background: url('data:image/svg+xml;charset=utf-8,<svg fill="#000" stroke="#fff">...</svg>');
+    background: url('data:image/svg+xml;charset=utf-8,%3Csvg fill='%23000' stroke='%23fff'%3E...%3C/svg%3E');
 }
 ```
 
@@ -39,6 +39,12 @@ postcss([ require('postcss-inline-svg')(options) ])
 See [PostCSS] docs for examples for your environment.
 
 ### Options
+
+#### options.encode
+
+Enable light url encode which replaces `<`, `>`, `&`, `#`
+
+Default: true
 
 #### options.path
 
