@@ -73,12 +73,12 @@ let tests = [{
     }
 }];
 
-test('ast2data', t => {
-    tests.forEach(item => {
+tests.forEach((item, i) => {
+    test(`#${i + 1}`, t => {
         var ast = postcss.parse(item.fixture);
         let result = ast2data(ast);
         t.same(result, item.expected);
-    });
 
-    t.end();
+        t.end();
+    });
 });

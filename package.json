@@ -37,6 +37,7 @@
   "scripts": {
     "lint": "eslint index.js lib test",
     "pretest": "npm run lint",
-    "test": "ava"
+    "test": "ava",
+    "prepublish": "npm test"
   }
 }

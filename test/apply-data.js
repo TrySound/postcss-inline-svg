@@ -91,11 +91,10 @@ let tests = [{
 }];
 /* eslint-enable max-len */
 
-test('apply-data', t => {
-    tests.forEach(item => {
+tests.forEach((item, i) => {
+    test(`#${i + 1}`, t => {
         let result = applyData(item.fixture, item);
         t.is(result, item.expected);
+        t.end();
     });
-
-    t.end();
 });

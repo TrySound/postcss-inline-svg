@@ -56,12 +56,12 @@ let tests = [{
 }];
 /* eslint-enable max-len */
 
-test('postcss-inline-svg', t => {
-    return Promise.all(tests.map(item => {
+tests.forEach((item, i) => {
+    test(`#${i + 1}`, t => {
         return postcss([
             plugin(item.options)
         ]).process(item.fixture, item.options).then(function (result) {
             t.is(result.css, item.expected);
         });
-    }));
+    });
 });
