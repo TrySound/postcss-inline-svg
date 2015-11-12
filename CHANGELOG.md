@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.0
+
+* Add transform option
+
 ## 1.1.1
 
 * Improve documentation

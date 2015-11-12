@@ -53,6 +53,14 @@ let tests = [{
 }, {
     fixture: '@svg-load nav url(svg/nested-path/nested-icon.svg){}h1{background:svg-load(svg/nested-path/nested-icon.svg)}',
     expected: 'h1{background:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 50 50\'%3E%3Cpath/%3E%3C/svg%3E")}'
+}, {
+    fixture: '@svg-load nav url(svg/nav.svg){}h1{background:svg-inline(nav)}h1{background:svg-load(svg/nested-path/nested-icon.svg)}',
+    expected: 'h1{background:url(nav.svg: transformed content)}h1{background:url(nested-icon.svg: transformed content)}',
+    options: {
+        transform: function (result, path) {
+            return path.split(/\\|\//).pop() + ': transformed content';
+        }
+    }
 }];
 /* eslint-enable max-len */
 
@@ -62,6 +70,7 @@ tests.forEach((item, i) => {
             plugin(item.options)
         ]).process(item.fixture, item.options).then(function (result) {
             t.is(result.css, item.expected);
+            t.is(result.warnings().length, 0);
         });
     });
 });

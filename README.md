@@ -40,17 +40,24 @@ See [PostCSS] docs for examples for your environment.
 
 ### Options
 
+#### options.path
+
+Path which will resolve url
+
+Default: `false` - path will be relative to source file if it was specified
+
 #### options.encode
 
 Enable light url encode which replaces `<`, `>`, `&`, `#`
 
 Default: true
 
-#### options.path
+#### options.transform(data, path, opts)
 
-Path which will resolve url
+Function which transforms svg content as you like. If result is falsy will be used default transform. Result should includes data:uri prefix and quotes.
 
-Default: `false` - path will be relative to source file if it was specified
+> options.encode affects only default transform
+
 
 # License
 
