@@ -51,3 +51,7 @@ Default: true
 Path which will resolve url
 
 Default: `false` - path will be relative to source file if it was specified
+
+# License
+
+MIT © [Bogdan Chadkin](mailto:trysound@yandex.ru)
