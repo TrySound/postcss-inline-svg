@@ -75,10 +75,8 @@ let tests = [{
 
 tests.forEach((item, i) => {
     test(`#${i + 1}`, t => {
-        var ast = postcss.parse(item.fixture);
+        let ast = postcss.parse(item.fixture);
         let result = ast2data(ast);
         t.same(result, item.expected);
-
-        t.end();
     });
 });
