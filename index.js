@@ -7,7 +7,7 @@ var ast2data = require('./lib/ast2data');
 function resolvePath(opts, node, url) {
     var root;
     if (!opts.path) {
-        if (node.source.input.file) {
+        if (node.source && node.source.input) {
             root = path.dirname(node.source.input.file);
         } else {
             root = process.cwd();
