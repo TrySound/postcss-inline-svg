@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.1
+
+* Fix relative path detecting
+
 ## 1.2.0
 
 * Add transform option
