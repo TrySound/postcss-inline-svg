@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.0
+
+* Refactoring
+* Loaded files will be cached
+
 ## 1.2.1
 
 * Fix relative path detecting
