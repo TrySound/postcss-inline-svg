@@ -16,6 +16,18 @@ let tests = [{
         encode: false
     }
 }, {
+    fixture: [
+        'h1{background:svg-load(svg/up.svg, fill: #000, stroke: #fff)}',
+        'h1{background:svg-load(svg/up.svg, fill: #fff, stroke: #000)}'
+    ].join(''),
+    expected: [
+        'h1{background:url("data:image/svg+xml;charset=utf-8,<?xml version=\'1.0\' encoding=\'utf-8\'?> <svg version=\'1.1\' id=\'Capa_1\' xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\' x=\'0px\' y=\'0px\' width=\'612px\' height=\'612px\' viewBox=\'8 205.9 612 612\' enable-background=\'new 8 205.9 612 612\' xml:space=\'preserve\' fill=\'#000\' stroke=\'#fff\'> <path d=\'M160.9,498.4l19.6,19.6l119.7-120.1v267h27.7V398l119.7,120.1l19.6-19.6L314,344.9L160.9,498.4z M620,205.9H8v612h612V205.9 z M35.8,790.1V233.7h556.4v556.4H35.8L35.8,790.1z\'/> </svg>")}',
+        'h1{background:url("data:image/svg+xml;charset=utf-8,<?xml version=\'1.0\' encoding=\'utf-8\'?> <svg version=\'1.1\' id=\'Capa_1\' xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\' x=\'0px\' y=\'0px\' width=\'612px\' height=\'612px\' viewBox=\'8 205.9 612 612\' enable-background=\'new 8 205.9 612 612\' xml:space=\'preserve\' fill=\'#fff\' stroke=\'#000\'> <path d=\'M160.9,498.4l19.6,19.6l119.7-120.1v267h27.7V398l119.7,120.1l19.6-19.6L314,344.9L160.9,498.4z M620,205.9H8v612h612V205.9 z M35.8,790.1V233.7h556.4v556.4H35.8L35.8,790.1z\'/> </svg>")}'
+    ].join(''),
+    options: {
+        encode: false
+    }
+}, {
     fixture: '@svg-load nav url(nested-icon.svg){}h1{background:svg-load(nested-icon.svg)}',
     expected: 'h1{background:url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 50 50\'><path/></svg>")}',
     options: {

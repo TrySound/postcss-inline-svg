@@ -1,24 +1,10 @@
-var path = require('path');
 var postcss = require('postcss');
 var valueParser = require('postcss-value-parser');
+var resolve = require('./lib/resolve');
 var loadSVG = require('./lib/load-svg');
 var ast2data = require('./lib/ast2data');
 
-function resolvePath(opts, node, url) {
-    var root;
-    if (!opts.path) {
-        if (node.source && node.source.input) {
-            root = path.dirname(node.source.input.file);
-        } else {
-            root = process.cwd();
-        }
-    } else {
-        root = path.resolve(process.cwd(), opts.path);
-    }
-    return path.resolve(root, url);
-}
-
-function defineLoad(result, promises, svgs, atrule, opts) {
+function defineLoad(result, atrule, load, svgs, opts) {
     atrule.remove();
 
     var data = ast2data(atrule);
@@ -31,23 +17,24 @@ function defineLoad(result, promises, svgs, atrule, opts) {
         params[2].value !== 'url' ||
         params[2].nodes.length === 0
     ) {
-        return atrule.warn(result, 'Invalid @svg-load definition');
+        atrule.warn(result, 'Invalid @svg-load definition');
+        return Promise.resolve();
     }
 
     var name = params[0].value;
-    var url = resolvePath(opts, atrule, params[2].nodes[0].value);
-    var promise = loadSVG(url, data, opts).then(function (svg) {
+    var file = resolve(atrule, params[2].nodes[0].value, opts);
+    return load(file, data).then(function (svg) {
         if (svg) {
             svgs[name] = svg;
         } else {
-            return atrule.warn(result, 'Invalid svg in `' + url + '`');
+            atrule.warn(result, 'Invalid svg in `' + file + '`');
+            return;
         }
     });
-
-    promises.push(promise);
 }
 
-function insertLoad(result, promises, decl, opts) {
+function insertLoad(result, decl, load, opts) {
+    var promises = [];
     decl.value.walk(function (node) {
         if (node.type !== 'function' || node.value !== 'svg-load') {
             return;
@@ -78,7 +65,7 @@ function insertLoad(result, promises, decl, opts) {
             }
             url = valueParser.stringify(node.nodes.slice(0, i));
         }
-        url = resolvePath(opts, decl, url);
+        var file = resolve(decl, url, opts);
         while (i < max) {
             if (i + 3 >= max ||
                 node.nodes[i].type !== 'div' ||
@@ -98,16 +85,17 @@ function insertLoad(result, promises, decl, opts) {
         node.nodes = [{
             type: 'word'
         }];
-        var promise = loadSVG(url, {
+        var promise = load(file, {
             root: params
-        }, opts).then(function (svg) {
+        }).then(function (svg) {
             node.nodes[0].value = svg;
         });
         promises.push(promise);
     });
+    return Promise.all(promises);
 }
 
-function insertInline(result, svgs, decl) {
+function insertInline(result, decl, svgs) {
     decl.value.walk(function (node) {
         if (node.type !== 'function' || node.value !== 'svg-inline') {
             return;
@@ -139,21 +127,22 @@ module.exports = postcss.plugin('postcss-inline-svg', function (opts) {
     opts = opts || {};
 
     return function (css, result) {
+        var load = loadSVG(opts);
         var promises = [];
-        var svgs = {};
         var decls = [];
+        var svgs = {};
 
         css.walk(function (node) {
             if (node.type === 'atrule') {
                 if (node.name === 'svg-load') {
-                    defineLoad(result, promises, svgs, node, opts);
+                    promises.push(defineLoad(result, node, load, svgs, opts));
                 }
             } else if (node.type === 'decl') {
                 if (~node.value.indexOf('svg-load(') ||
                     ~node.value.indexOf('svg-inline(')
                 ) {
                     node.value = valueParser(node.value);
-                    insertLoad(result, promises, node, opts);
+                    promises.push(insertLoad(result, node, load, opts));
                     decls.push(node);
                 }
             }
@@ -161,7 +150,7 @@ module.exports = postcss.plugin('postcss-inline-svg', function (opts) {
 
         return Promise.all(promises).then(function () {
             decls.forEach(function (decl) {
-                insertInline(result, svgs, decl, opts);
+                insertInline(result, decl, svgs, opts);
                 decl.value = decl.value.toString();
             });
         });
