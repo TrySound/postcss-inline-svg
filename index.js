@@ -4,7 +4,7 @@ var resolve = require('./lib/resolve');
 var loadSVG = require('./lib/load-svg');
 var ast2data = require('./lib/ast2data');
 
-function defineLoad(result, atrule, load, svgs, opts) {
+function defineLoad(result, atrule, svgs, opts) {
     atrule.remove();
 
     var data = ast2data(atrule);
@@ -23,7 +23,7 @@ function defineLoad(result, atrule, load, svgs, opts) {
 
     var name = params[0].value;
     var file = resolve(atrule, params[2].nodes[0].value, opts);
-    return load(file, data).then(function (svg) {
+    return loadSVG(file, data, opts).then(function (svg) {
         if (svg) {
             svgs[name] = svg;
         } else {
@@ -33,7 +33,7 @@ function defineLoad(result, atrule, load, svgs, opts) {
     });
 }
 
-function insertLoad(result, decl, load, opts) {
+function insertLoad(result, decl, opts) {
     var promises = [];
     decl.value.walk(function (node) {
         if (node.type !== 'function' || node.value !== 'svg-load') {
@@ -85,9 +85,9 @@ function insertLoad(result, decl, load, opts) {
         node.nodes = [{
             type: 'word'
         }];
-        var promise = load(file, {
+        var promise = loadSVG(file, {
             root: params
-        }).then(function (svg) {
+        }, opts).then(function (svg) {
             node.nodes[0].value = svg;
         });
         promises.push(promise);
@@ -127,7 +127,6 @@ module.exports = postcss.plugin('postcss-inline-svg', function (opts) {
     opts = opts || {};
 
     return function (css, result) {
-        var load = loadSVG(opts);
         var promises = [];
         var decls = [];
         var svgs = {};
@@ -135,14 +134,14 @@ module.exports = postcss.plugin('postcss-inline-svg', function (opts) {
         css.walk(function (node) {
             if (node.type === 'atrule') {
                 if (node.name === 'svg-load') {
-                    promises.push(defineLoad(result, node, load, svgs, opts));
+                    promises.push(defineLoad(result, node, svgs, opts));
                 }
             } else if (node.type === 'decl') {
                 if (~node.value.indexOf('svg-load(') ||
                     ~node.value.indexOf('svg-inline(')
                 ) {
                     node.value = valueParser(node.value);
-                    promises.push(insertLoad(result, node, load, opts));
+                    promises.push(insertLoad(result, node, opts));
                     decls.push(node);
                 }
             }
