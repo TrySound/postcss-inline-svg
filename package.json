@@ -30,7 +30,7 @@
     "read-cache": "^1.0.0"
   },
   "devDependencies": {
-    "ava": "^0.7.0",
+    "ava": "^0.9.1",
     "babel-eslint": "^4.1.4",
     "eslint": "^1.9.0"
   },
