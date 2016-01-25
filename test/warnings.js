@@ -18,7 +18,7 @@ tests.map((item, i) => {
     test(`#${i + 1}`, t => {
         return postcss([
             plugin(item.options)
-        ]).process(item.fixture, item.options).then(function (result) {
+        ]).process(item.fixture, item.options).then(result => {
             t.is(result.warnings()[0].text, item.warning);
             t.is(result.css, item.expected);
         });
