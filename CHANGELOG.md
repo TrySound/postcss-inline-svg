@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.2
+
+* Fix URI malformed error
+
+## 1.3.1
+
+* Add read-cache
+
 ## 1.3.0
 
 * Refactoring
