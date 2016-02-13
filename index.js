@@ -137,8 +137,8 @@ module.exports = postcss.plugin('postcss-inline-svg', function (opts) {
                     promises.push(defineLoad(result, node, svgs, opts));
                 }
             } else if (node.type === 'decl') {
-                if (~node.value.indexOf('svg-load(') ||
-                    ~node.value.indexOf('svg-inline(')
+                if (node.value.indexOf('svg-load(') !== -1 ||
+                    node.value.indexOf('svg-inline(') !== -1
                 ) {
                     node.value = valueParser(node.value);
                     promises.push(insertLoad(result, node, opts));
