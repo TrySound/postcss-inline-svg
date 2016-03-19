@@ -3,6 +3,7 @@ var valueParser = require('postcss-value-parser');
 var resolve = require('./lib/resolve');
 var loadSVG = require('./lib/load-svg');
 var ast2data = require('./lib/ast2data');
+var nodes2data = require('./lib/nodes2data');
 
 function defineLoad(result, atrule, svgs, opts) {
     atrule.remove();
@@ -66,20 +67,13 @@ function insertLoad(result, decl, opts) {
             url = valueParser.stringify(node.nodes.slice(0, i));
         }
         var file = resolve(decl, url, opts);
-        while (i < max) {
-            if (i + 3 >= max ||
-                node.nodes[i].type !== 'div' ||
-                node.nodes[i].value !== ',' ||
-                node.nodes[i + 1].type !== 'word' ||
-                node.nodes[i + 2].type !== 'div' ||
-                node.nodes[i + 2].value !== ':' ||
-                node.nodes[i + 3].type !== 'word'
-            ) {
-                decl.warn(result, 'Invalid svg-load() definition');
+        if (node.nodes[i]) {
+            try {
+                params = nodes2data(node.nodes.slice(i + 1));
+            } catch (e) {
+                decl.warn(result, e.message);
                 return;
             }
-            params[node.nodes[i + 1].value] = node.nodes[i + 3].value;
-            i += 4;
         }
         node.value = 'url';
         node.nodes = [{

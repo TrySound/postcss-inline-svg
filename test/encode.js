@@ -9,7 +9,7 @@ const files = [
 files.forEach(file => {
     test(`should decode: ${file}`, t => {
         const svg = encode(readFile(`svg/encode/${file}`, 'utf-8'));
-        t.doesNotThrow(() => {
+        t.notThrows(() => {
             decodeURIComponent(svg);
         });
     });
