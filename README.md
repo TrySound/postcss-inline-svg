@@ -17,7 +17,7 @@
     background: svg-inline(nav);
 }
 .up {
-    background: svg-load(img/arrow-up.svg, fill: #000, stroke: #fff);
+    background: svg-load(img/arrow-up.svg, fill=#000, stroke=#fff);
 }
 ```
 
@@ -27,6 +27,17 @@
 }
 .up {
     background: url("data:image/svg+xml;charset=utf-8,%3Csvg fill='%23000' stroke='%23fff'%3E...%3C/svg%3E");
+}
+```
+
+PostCSS parsers allow to use different syntax (but only one syntax in one svg-load() definition):
+
+```css
+.up {
+    background: svg-load(img/arrow-up.svg, fill: #000, stroke: #fff);
+}
+.down {
+    background: svg-load(img/arrow-down.svg, fill=#000, stroke=#fff);
 }
 ```
 

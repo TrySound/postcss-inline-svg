@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.0
+
+* Support "=" separator in svg-load() definition
+
 ## 1.3.2
 
 * Fix URI malformed error
