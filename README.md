@@ -17,7 +17,7 @@
     background: svg-inline(nav);
 }
 .up {
-    background: svg-load(img/arrow-up.svg, fill=#000, stroke=#fff);
+    background: svg-load('img/arrow-up.svg', fill=#000, stroke=#fff);
 }
 ```
 
@@ -34,10 +34,10 @@ PostCSS parsers allow to use different syntax (but only one syntax in one svg-lo
 
 ```css
 .up {
-    background: svg-load(img/arrow-up.svg, fill: #000, stroke: #fff);
+    background: svg-load('img/arrow-up.svg', fill: #000, stroke: #fff);
 }
 .down {
-    background: svg-load(img/arrow-down.svg, fill=#000, stroke=#fff);
+    background: svg-load('img/arrow-down.svg', fill=#000, stroke=#fff);
 }
 ```
 
