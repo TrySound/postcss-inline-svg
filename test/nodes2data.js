@@ -51,7 +51,7 @@ tests.forEach(item => {
                 nodes2data(nodes);
             }, item.error);
         } else {
-            t.same(nodes2data(nodes), item.expected);
+            t.deepEqual(nodes2data(nodes), item.expected);
         }
     });
 });

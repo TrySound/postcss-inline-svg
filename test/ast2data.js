@@ -77,6 +77,6 @@ tests.forEach((item, i) => {
     test(`#${i + 1}`, t => {
         let ast = postcss.parse(item.fixture);
         let result = ast2data(ast);
-        t.same(result, item.expected);
+        t.deepEqual(result, item.expected);
     });
 });

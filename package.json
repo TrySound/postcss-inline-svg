@@ -30,7 +30,7 @@
     "read-cache": "^1.0.0"
   },
   "devDependencies": {
-    "ava": "^0.13.0",
+    "ava": "^0.15.2",
     "eslint": "^2.0.0",
     "eslint-config-postcss": "^2.0.0"
   },
