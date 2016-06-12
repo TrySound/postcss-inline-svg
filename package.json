@@ -9,9 +9,9 @@
     "svg",
     "inline"
   ],
+  "main": "dist/index.js",
   "files": [
-    "index.js",
-    "lib"
+    "dist"
   ],
   "author": "Bogdan Chadkin <trysound@yandex.ru>",
   "license": "MIT",
@@ -31,10 +31,13 @@
   },
   "devDependencies": {
     "ava": "^0.15.2",
+    "buble": "^0.10.6",
     "eslint": "^2.0.0",
     "eslint-config-postcss": "^2.0.0"
   },
   "scripts": {
+    "build": "buble src -o dist",
+    "pretest": "npm run build",
     "test": "ava",
     "posttest": "eslint .",
     "prepublish": "npm test"

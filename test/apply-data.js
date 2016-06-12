@@ -1,5 +1,5 @@
 import test from 'ava';
-import applyData from '../lib/apply-data';
+import applyData from '../dist/lib/apply-data';
 
 /* eslint-disable max-len */
 let tests = [{

@@ -1,6 +1,6 @@
 import test from 'ava';
 import { readFileSync as readFile } from 'fs';
-import encode from '../lib/encode';
+import encode from '../dist/lib/encode';
 
 const files = [
     'border.svg'

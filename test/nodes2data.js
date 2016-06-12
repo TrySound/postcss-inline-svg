@@ -1,6 +1,6 @@
 import test from 'ava';
 import valueParser from 'postcss-value-parser';
-import nodes2data from '../lib/nodes2data';
+import nodes2data from '../dist/lib/nodes2data';
 
 let tests = [{
     fixture: '',

@@ -1,6 +1,6 @@
 import test from 'ava';
 import postcss from 'postcss';
-import ast2data from '../lib/ast2data';
+import ast2data from '../dist/lib/ast2data';
 
 let tests = [{
     fixture: `
