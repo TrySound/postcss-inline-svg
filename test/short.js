@@ -3,13 +3,15 @@ const assert = require('assert');
 const postcss = require('postcss');
 const plugin = require('../');
 
-function compare(fixture, expected, options = { encode: false, warnings: [] }) {
+function compare(fixture, expected, warnings = []) {
     return postcss([
-        plugin(options)
-    ]).process(fixture, options).then(result => {
-        result.warnings().forEach((warning, index) => {
-            assert.equal(options.warnings[index], warning.text);
+        plugin({ encode: false })
+    ]).process(fixture).then(result => {
+        const resultWarnings = result.warnings();
+        resultWarnings.forEach((warning, index) => {
+            assert.equal(warnings[index], warning.text);
         });
+        assert.equal(resultWarnings.length, warnings.length);
         assert.equal(result.css, expected);
     });
 }
@@ -17,13 +19,6 @@ function compare(fixture, expected, options = { encode: false, warnings: [] }) {
 test('should compile basic', () => {
     return compare(
         `background: svg-load('fixtures/basic.svg');`,
-        `background: url("data:image/svg+xml;charset=utf-8,<svg id='basic'/>");`
-    );
-});
-
-test('should compile unquoted path', () => {
-    return compare(
-        `background: svg-load(fixtures/basic.svg);`,
         `background: url("data:image/svg+xml;charset=utf-8,<svg id='basic'/>");`
     );
 });
@@ -36,12 +31,10 @@ test('should skip unexpected function syntax', () => {
     return compare(
         fixtures,
         fixtures,
-        {
-            warnings: [
-                'Invalid "svg-load()" definition',
-                'Invalid "svg-load()" definition'
-            ]
-        }
+        [
+            'Invalid "svg-load()" definition',
+            'Invalid "svg-load()" definition'
+        ]
     );
 });
 
@@ -52,10 +45,16 @@ test('should compile fill param', () => {
     );
 });
 
-test('should compile unquoted path with param', () => {
+test('should compile unquoted path', () => {
     return compare(
-        `background: svg-load(fixtures/basic.svg, fill=#fff);`,
-        `background: url("data:image/svg+xml;charset=utf-8,<svg id='basic' fill='#fff'/>");`
+        `
+        background: svg-load(fixtures/basic.svg);
+        background: svg-load(fixtures/basic.svg, fill=#fff);
+        `,
+        `
+        background: url("data:image/svg+xml;charset=utf-8,<svg id='basic'/>");
+        background: url("data:image/svg+xml;charset=utf-8,<svg id='basic' fill='#fff'/>");
+        `
     );
 });
 
@@ -83,14 +82,12 @@ test('should skip param with unexpected separator', () => {
     return compare(
         fixtures,
         fixtures,
-        {
-            warnings: [
-                'Expected ":" separator in "stroke=#000"',
-                'Expected "=" separator in "stroke: #000"',
-                'Expected ":" or "=" separator in "fill #fff"',
-                'Expected ":" or "=" separator in "fill-#fff"'
-            ]
-        }
+        [
+            'Expected ":" separator in "stroke=#000"',
+            'Expected "=" separator in "stroke: #000"',
+            'Expected ":" or "=" separator in "fill #fff"',
+            'Expected ":" or "=" separator in "fill-#fff"'
+        ]
     );
 });
 
