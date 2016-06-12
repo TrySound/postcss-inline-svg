@@ -21,6 +21,13 @@ test('should compile basic', () => {
     );
 });
 
+test('should compile unquoted path', () => {
+    return compare(
+        `background: svg-load(fixtures/basic.svg);`,
+        `background: url("data:image/svg+xml;charset=utf-8,<svg id='basic'/>");`
+    );
+});
+
 test('should skip unexpected function syntax', () => {
     const fixtures = `
         background: svg-load();
@@ -41,6 +48,13 @@ test('should skip unexpected function syntax', () => {
 test('should compile fill param', () => {
     return compare(
         `background: svg-load('fixtures/basic.svg', fill=#fff);`,
+        `background: url("data:image/svg+xml;charset=utf-8,<svg id='basic' fill='#fff'/>");`
+    );
+});
+
+test('should compile unquoted path with param', () => {
+    return compare(
+        `background: svg-load(fixtures/basic.svg, fill=#fff);`,
         `background: url("data:image/svg+xml;charset=utf-8,<svg id='basic' fill='#fff'/>");`
     );
 });
