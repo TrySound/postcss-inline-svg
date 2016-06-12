@@ -45,9 +45,9 @@ let tests = [{
 
 tests.forEach(item => {
     test(item.fixture, t => {
-        let nodes = valueParser(item.fixture).nodes;
+        const { nodes } = valueParser(item.fixture);
         if (item.error) {
-            t.throws(function () {
+            t.throws(() => {
                 nodes2data(nodes);
             }, item.error);
         } else {

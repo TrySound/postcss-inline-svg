@@ -1,6 +1,6 @@
-var readCache = require('read-cache');
-var applyData = require('./apply-data');
-var encodeURI = require('./encode');
+const readCache = require('read-cache');
+const applyData = require('./apply-data');
+const encodeURI = require('./encode');
 
 function transformDefault(result, encode) {
     // Normalize
@@ -17,9 +17,9 @@ function transformDefault(result, encode) {
     return '"data:image/svg+xml;charset=utf-8,' + result + '"';
 }
 
-module.exports = function (path, data, opts) {
-    return readCache(path, 'utf-8').then(function (result) {
-        var transformed;
+module.exports = function loadSVG(path, data, opts) {
+    return readCache(path, 'utf-8').then(result => {
+        let transformed;
         result = applyData(result, data);
 
         if (typeof opts.transform === 'function') {

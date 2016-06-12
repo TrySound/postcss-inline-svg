@@ -1,4 +1,4 @@
-module.exports = function (result) {
+module.exports = function encode(result) {
     return result
         .replace(/%/g, '%25')
         .replace(/</g, '%3C')

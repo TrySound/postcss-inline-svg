@@ -1,12 +1,12 @@
-var stringify = require('postcss-value-parser').stringify;
+const { stringify } = require('postcss-value-parser');
 
-module.exports = function (nodes) {
-    var data = {};
-    var args = [];
-    var last = '';
-    var sep;
+module.exports = function nodes2data(nodes) {
+    const data = {};
+    const args = [];
+    let last = '';
+    let sep;
 
-    nodes.forEach(function (node) {
+    nodes.forEach(node => {
         if (node.type === 'div') {
             if (node.value === ',') {
                 args.push(last);
@@ -25,7 +25,7 @@ module.exports = function (nodes) {
 
     args.push(last);
 
-    args.forEach(function (arg) {
+    args.forEach(arg => {
         if (!arg) {
             throw Error('Unexpected comma');
         }
@@ -41,7 +41,7 @@ module.exports = function (nodes) {
             }
         }
 
-        var pair = arg.split(sep);
+        const pair = arg.split(sep);
 
         if (pair.length === 1) {
             throw Error('Expected "' + sep + '" separator in "' + arg + '"');

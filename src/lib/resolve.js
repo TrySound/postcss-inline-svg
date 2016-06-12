@@ -1,8 +1,8 @@
-var path = require('path');
+const path = require('path');
 
-module.exports = function (node, url, opts) {
-    var relative = node.source && node.source.input && node.source.input.file;
-    var root;
+module.exports = function resolve(node, url, opts) {
+    const relative = node.source && node.source.input && node.source.input.file;
+    let root;
     if (!opts.path && relative) {
         root = path.dirname(relative);
     } else {

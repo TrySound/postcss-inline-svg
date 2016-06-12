@@ -39,10 +39,10 @@
     "build": "buble src -o dist",
     "pretest": "npm run build",
     "test": "ava",
-    "posttest": "eslint .",
+    "posttest": "eslint src test",
     "prepublish": "npm test"
   },
   "eslintConfig": {
-    "extends": "postcss/es5"
+    "extends": "postcss"
   }
 }

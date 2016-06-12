@@ -1,14 +1,14 @@
-module.exports = function (ast) {
-    var root = {};
-    var selectors = {};
+module.exports = function ast2data(ast) {
+    const root = {};
+    const selectors = {};
 
-    ast.each(function (node) {
-        var selector;
+    ast.each(node => {
+        let selector;
         if (node.type === 'decl') {
             root[node.prop] = node.value;
         } else if (node.type === 'rule') {
             selector = selectors[node.selectors] = {};
-            node.each(function (child) {
+            node.each(child => {
                 if (child.type === 'decl') {
                     selector[child.prop] = child.value;
                 }
@@ -17,7 +17,7 @@ module.exports = function (ast) {
     });
 
     return {
-        root: root,
-        selectors: selectors
+        root,
+        selectors
     };
 };

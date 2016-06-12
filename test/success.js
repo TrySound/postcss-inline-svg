@@ -75,7 +75,7 @@ let tests = [{
     fixture: '@svg-load nav url(svg/nav.svg){}h1{background:svg-inline(nav)}h1{background:svg-load(svg/nested-path/nested-icon.svg)}',
     expected: 'h1{background:url(nav.svg: transformed content)}h1{background:url(nested-icon.svg: transformed content)}',
     options: {
-        transform: function (result, path) {
+        transform(result, path) {
             return path.split(/\\|\//).pop() + ': transformed content';
         }
     }
@@ -87,7 +87,7 @@ tests.forEach((item, i) => {
         return postcss([
             plugin(item.options)
         ]).process(item.fixture, item.options).then(result => {
-            result.warnings().forEach(function (warning) {
+            result.warnings().forEach(warning => {
                 t.is(warning, undefined);
             });
             t.is(result.css, item.expected);
