@@ -41,7 +41,7 @@ function insertLoad(result, decl, opts) {
             return;
         }
         if (!node.nodes.length) {
-            decl.warn(result, `'${node.value}' function should not be empty`);
+            decl.warn(result, `Invalid "svg-load()" definition`);
             return;
         }
         let url;

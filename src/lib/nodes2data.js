@@ -19,7 +19,7 @@ module.exports = function nodes2data(nodes) {
         } else if (node.type === 'space') {
             last += ' ';
         } else {
-            throw Error('Invalid svg-load() definition');
+            throw Error('Invalid "svg-load()" definition');
         }
     });
 
@@ -27,7 +27,7 @@ module.exports = function nodes2data(nodes) {
 
     args.forEach(arg => {
         if (!arg) {
-            throw Error('Unexpected comma');
+            throw Error('Invalid "svg-load()" definition');
         }
 
         if (!sep) {
@@ -36,19 +36,18 @@ module.exports = function nodes2data(nodes) {
             } else if (arg.indexOf('=') !== -1) {
                 sep = '=';
             } else {
-                throw Error('Expected \':\' or \'=\' separator in "' +
-                    arg + '"');
+                throw Error(`Expected ":" or "=" separator in "${arg}"`);
             }
         }
 
         const pair = arg.split(sep);
 
         if (pair.length === 1) {
-            throw Error('Expected "' + sep + '" separator in "' + arg + '"');
+            throw Error(`Expected "${sep}" separator in "${arg}"`);
         }
 
         if (pair.length !== 2) {
-            throw Error('Unexpected separator in "' + arg + '"');
+            throw Error(`Expected ":" or "=" separator in "${arg}"`);
         }
 
         data[pair[0].trim()] = pair[1].trim();

@@ -43,6 +43,14 @@
     "prepublish": "npm test"
   },
   "eslintConfig": {
-    "extends": "postcss"
+    "extends": "postcss",
+    "rules": {
+      "quotes": [
+        0
+      ],
+      "max-len": [
+        0
+      ]
+    }
   }
 }
