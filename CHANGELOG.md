@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.0.0
+
+* Code and tests refactoring
+* `encode` is not included in `transform` and runs before it
+* `encode` is `function` or `false`
+* `transform` can't return false
+
 ## 1.4.0
 
 * Support "=" separator in svg-load() definition

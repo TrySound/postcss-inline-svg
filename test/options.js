@@ -117,7 +117,7 @@ describe('options', () => {
         );
     });
 
-    it('shoud combine results of "encode" and "transform"', () => {
+    it('should combine results of "encode" and "transform"', () => {
         return compare(
             `background: svg-load('fixtures/basic.svg');`,
             `background: url([transform: encode]);`,

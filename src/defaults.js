@@ -12,5 +12,5 @@ function normalize(code) {
 }
 
 export function transform(code) {
-    return '"data:image/svg+xml;charset=utf-8,' + normalize(code) + '"';
+    return `"data:image/svg+xml;charset=utf-8,${normalize(code)}"`;
 }

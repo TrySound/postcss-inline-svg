@@ -1,10 +1,10 @@
-# PostCSS Inline SVG [![Build Status][travis-img]][travis]
+# postcss-inline-svg [![Build Status][travis-img]][travis]
 
 [PostCSS] plugin to reference an SVG file and control its attributes with CSS syntax.
 
 [PostCSS]: https://github.com/postcss/postcss
-[travis-img]:  https://travis-ci.org/TrySound/postcss-inline-svg.svg
-[travis]:      https://travis-ci.org/TrySound/postcss-inline-svg
+[travis-img]: https://travis-ci.org/TrySound/postcss-inline-svg.svg
+[travis]: https://travis-ci.org/TrySound/postcss-inline-svg
 
 ```css
 @svg-load nav url(img/nav.svg) {
@@ -53,21 +53,38 @@ See [PostCSS] docs for examples for your environment.
 
 #### options.path
 
-Path which will resolve url
+Path which will resolve url.
 
-Default: `false` - path will be relative to source file if it was specified
+Default: `false` - path will be relative to source file if it was specified.
 
-#### options.encode
+#### options.encode(svg)
 
-Enable light url encode which replaces `<`, `>`, `&`, `#`
+Processes svg after applying parameters. Default will be ommited if passed `false`.
 
-Default: true
+Default:
 
-#### options.transform(data, path, opts)
+```js
+function encode(code) {
+    return code
+        .replace(/%/g, '%25')
+        .replace(/</g, '%3C')
+        .replace(/>/g, '%3E')
+        .replace(/&/g, '%26')
+        .replace(/#/g, '%23');
+}
+```
 
-Function which transforms svg content as you like. If result is falsy will be used default transform. Result should includes data:uri prefix and quotes.
+#### options.transform(svg, path)
 
-> options.encode affects only default transform
+Transforms svg after `encode` function.
+
+Default:
+
+```js
+function transform(code, id) {
+    return '"data:image/svg+xml;charset=utf-8,' + code.replace(/"/g, '\'').replace(/\s+/g, ' ').trim() + '"';
+}
+```
 
 
 ## Optimisation
