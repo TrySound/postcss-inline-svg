@@ -30,20 +30,23 @@
     "read-cache": "^1.0.0"
   },
   "devDependencies": {
-    "ava": "^0.15.2",
     "buble": "^0.10.6",
     "eslint": "^2.0.0",
-    "eslint-config-postcss": "^2.0.0"
+    "eslint-config-postcss": "^2.0.0",
+    "mocha": "^2.5.3"
   },
   "scripts": {
     "build": "buble src -o dist",
     "pretest": "npm run build",
-    "test": "ava",
+    "test": "mocha test/*.js --compilers js:buble/register",
     "posttest": "eslint src test",
     "prepublish": "npm test"
   },
   "eslintConfig": {
     "extends": "postcss",
+    "env": {
+      "mocha": true
+    },
     "rules": {
       "quotes": [
         0
