@@ -1,3 +1,5 @@
+import assign from 'object-assign';
+import { transform, encode } from './defaults.js';
 import postcss from 'postcss';
 import valueParser from 'postcss-value-parser';
 import resolve from './lib/resolve';
@@ -112,6 +114,11 @@ const postcssInlineSvg = (opts = {}) => (css, result) => {
     const promises = [];
     const decls = [];
     const svgs = {};
+
+    opts = assign({
+        encode,
+        transform
+    }, opts);
 
     css.walk(node => {
         if (node.type === 'atrule') {

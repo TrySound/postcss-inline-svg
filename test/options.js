@@ -105,9 +105,7 @@ describe('options', () => {
             background: url("data:image/svg+xml;charset=utf-8,%3Csvg id='basic'/%3E");
             background: url("data:image/svg+xml;charset=utf-8,%3Csvg id='basic'/%3E");
             `,
-            {
-                encode: true
-            }
+            {}
         );
     });
 
@@ -124,8 +122,23 @@ describe('options', () => {
             `,
             {
                 encode(code) {
-                    assert.equal(code, `<svg id='basic'/>`);
+                    assert.equal(code, `<svg id="basic"/>`);
                     return '1234567890';
+                }
+            }
+        );
+    });
+
+    it('shoud combine results of "encode" and "transform"', () => {
+        return compare(
+            `background: svg-load('fixtures/basic.svg');`,
+            `background: url([transform: encode]);`,
+            {
+                encode() {
+                    return 'encode';
+                },
+                transform(code) {
+                    return `[transform: ${code}]`;
                 }
             }
         );
