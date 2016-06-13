@@ -4,12 +4,6 @@ import plugin from '..';
 
 /* eslint-disable max-len */
 let tests = [{
-    fixture: '@svg-load nav url(svg/nav.svg) {path:nth-child(2){fill:#0ff};}h1{background:svg-inline(nav)}',
-    expected: 'h1{background:url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 50 50\'><path d=\'M10 12h30v4H10z\'/><path d=\'M10 22h30v4H10z\' fill=\'#0ff\'/><path d=\'M10 32h30v4H10z\'/></svg>")}',
-    options: {
-        encode: false
-    }
-}, {
     fixture: '@svg-load nav url(nested-icon.svg){}h1{background:svg-load(nested-icon.svg)}',
     expected: 'h1{background:url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 50 50\'><path/></svg>")}',
     options: {
@@ -34,19 +28,10 @@ let tests = [{
     fixture: '@svg-load nav url(svg/nested-path/nested-icon.svg){}h1{background:svg-load(svg/nested-path/nested-icon.svg)}',
     expected: 'h1{background:url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 50 50\'><path/></svg>")}',
     options: {
-        encode: false
-    }
-}, {
-    fixture: '@svg-load nav url(svg/nested-path/nested-icon.svg){}h1{background:svg-load(svg/nested-path/nested-icon.svg)}',
-    expected: 'h1{background:url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 50 50\'><path/></svg>")}',
-    options: {
         encode: false,
         from: './svg/index.css',
         path: '.'
     }
-}, {
-    fixture: '@svg-load nav url(svg/nested-path/nested-icon.svg){}h1{background:svg-load(svg/nested-path/nested-icon.svg)}',
-    expected: 'h1{background:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 50 50\'%3E%3Cpath/%3E%3C/svg%3E")}'
 }, {
     fixture: '@svg-load nav url(svg/nav.svg){}h1{background:svg-inline(nav)}h1{background:svg-load(svg/nested-path/nested-icon.svg)}',
     expected: 'h1{background:url(nav.svg: transformed content)}h1{background:url(nested-icon.svg: transformed content)}',

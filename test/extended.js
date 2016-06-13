@@ -1,0 +1,130 @@
+const test = require('ava');
+const assert = require('assert');
+const postcss = require('postcss');
+const plugin = require('../');
+
+function compare(fixture, expected, warnings = []) {
+    return postcss([
+        plugin({ encode: false })
+    ]).process(fixture).then(result => {
+        const resultWarnings = result.warnings();
+        resultWarnings.forEach((warning, index) => {
+            assert.equal(warnings[index], warning.text);
+        });
+        assert.equal(resultWarnings.length, warnings.length);
+        assert.equal(result.css, expected);
+    });
+}
+
+test('should compile basic', () => {
+    return compare(
+        `
+        @svg-load icon url(fixtures/basic.svg) {}
+        @svg-load icon2 url('fixtures/basic.svg') {}
+        background: svg-inline(icon);
+        background: svg-inline(icon2);
+        `,
+        `
+        background: url("data:image/svg+xml;charset=utf-8,<svg id=\'basic\'/>");
+        background: url("data:image/svg+xml;charset=utf-8,<svg id=\'basic\'/>");
+        `
+    );
+});
+
+test('should skip invalid syntax', () => {
+    const fixtures = `
+        @svg-load {}
+        @svg-load url() {}
+        @svg-load icon {}
+        @svg-load icon url() {}
+        background: svg-inline();
+    `;
+    return compare(
+        fixtures,
+        fixtures,
+        [
+            'Invalid "@svg-load" definition',
+            'Invalid "@svg-load" definition',
+            'Invalid "@svg-load" definition',
+            'Invalid "@svg-load" definition',
+            'Invalid "svg-inline()" statement'
+        ]
+    );
+});
+
+test('should skip if svg is not defined', () => {
+    const fixtures = `
+        background: svg-inline(icon);
+        background: svg-inline(icon2);
+    `;
+    return compare(
+        fixtures,
+        fixtures,
+        [
+            '"icon" svg is not defined',
+            '"icon2" svg is not defined'
+        ]
+    );
+});
+
+test('should apply root params', () => {
+    return compare(
+        `
+        @svg-load icon url(fixtures/basic.svg) {
+            fill: #fff;
+            stroke: #000;
+        }
+        background: svg-inline(icon);
+        `,
+        `
+        background: url("data:image/svg+xml;charset=utf-8,<svg id='basic' fill='#fff' stroke='#000'/>");
+        `
+    );
+});
+
+test('should rewrite root params', () => {
+    return compare(
+        `
+        @svg-load icon url(fixtures/basic-black.svg) {
+            fill: #fff;
+            stroke: #000;
+        }
+        background: svg-inline(icon);
+        `,
+        `
+        background: url("data:image/svg+xml;charset=utf-8,<svg id='basic-black' fill='#fff' stroke='#000'/>");
+        `
+    );
+});
+
+test('should apply params by tag', () => {
+    return compare(
+        `
+        @svg-load icon url(fixtures/path.svg) {
+            path {
+                fill: #fff;
+            }
+        }
+        background: svg-inline(icon);
+        `,
+        `
+        background: url("data:image/svg+xml;charset=utf-8,<svg id='path'><path class='g1' fill='#fff'/><path class='g1' fill='#fff'/><path fill='#fff'/></svg>");
+        `
+    );
+});
+
+test('should apply params by className', () => {
+    return compare(
+        `
+        @svg-load icon url(fixtures/path.svg) {
+            .g1 {
+                fill: #fff;
+            }
+        }
+        background: svg-inline(icon);
+        `,
+        `
+        background: url("data:image/svg+xml;charset=utf-8,<svg id='path'><path class='g1' fill='#fff'/><path class='g1' fill='#fff'/><path fill='#000'/></svg>");
+        `
+    );
+});

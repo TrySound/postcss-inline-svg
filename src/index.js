@@ -6,8 +6,6 @@ const ast2data = require('./lib/ast2data');
 const nodes2data = require('./lib/nodes2data');
 
 function defineLoad(result, atrule, svgs, opts) {
-    atrule.remove();
-
     const data = ast2data(atrule);
     const params = valueParser(atrule.params).nodes;
     if (!data ||
@@ -18,10 +16,11 @@ function defineLoad(result, atrule, svgs, opts) {
         params[2].value !== 'url' ||
         params[2].nodes.length === 0
     ) {
-        atrule.warn(result, 'Invalid @svg-load definition');
+        atrule.warn(result, 'Invalid "@svg-load" definition');
         return Promise.resolve();
     }
 
+    atrule.remove();
     const name = params[0].value;
     const file = resolve(atrule, params[2].nodes[0].value, opts);
     return loadSVG(file, data, opts).then(svg => {
@@ -91,13 +90,13 @@ function insertInline(result, decl, svgs) {
             return;
         }
         if (!node.nodes.length) {
-            decl.warn(result, `'${node.value}' function should not be empty`);
+            decl.warn(result, `Invalid "svg-inline()" statement`);
             return;
         }
 
         const name = node.nodes[0].value;
         if (!svgs[name]) {
-            decl.warn(result, `'${name}' svg is not defined`);
+            decl.warn(result, `"${name}" svg is not defined`);
             return;
         }
 
