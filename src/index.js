@@ -102,22 +102,22 @@ export default postcss.plugin('postcss-inline-svg', opts => (css, result) => {
         transform
     }, opts);
 
-    let loaders = [];
-    let atLoaders = [];
-    let inliners = [];
+    const loaders = [];
+    const atLoaders = [];
+    const inliners = [];
 
     css.walk(node => {
         if (node.type === 'atrule') {
             if (node.name === 'svg-load') {
-                atLoaders = atLoaders.concat(grabAtLoaders(result, node));
+                atLoaders.push(...grabAtLoaders(result, node));
             }
         } else if (node.type === 'decl') {
             if (node.value.indexOf('svg-load(') !== -1 ||
                 node.value.indexOf('svg-inline(') !== -1
             ) {
                 node.value = valueParser(node.value);
-                loaders = loaders.concat(grabLoaders(result, node));
-                inliners = inliners.concat(grabInliners(result, node));
+                loaders.push(...grabLoaders(result, node));
+                inliners.push(...grabInliners(result, node));
             }
         }
     });
