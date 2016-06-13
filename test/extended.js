@@ -25,8 +25,8 @@ test('should compile basic', () => {
         background: svg-inline(icon2);
         `,
         `
-        background: url("data:image/svg+xml;charset=utf-8,<svg id=\'basic\'/>");
-        background: url("data:image/svg+xml;charset=utf-8,<svg id=\'basic\'/>");
+        background: url("data:image/svg+xml;charset=utf-8,<svg id='basic'/>");
+        background: url("data:image/svg+xml;charset=utf-8,<svg id='basic'/>");
         `
     );
 });
