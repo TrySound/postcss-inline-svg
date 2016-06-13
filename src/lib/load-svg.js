@@ -10,7 +10,9 @@ function transformDefault(result, encode) {
             .trim();
 
     // Encode
-    if (encode !== false) {
+    if (typeof encode === 'function') {
+        result = encode(result);
+    } else if (encode !== false) {
         result = encodeURI(result);
     }
 
