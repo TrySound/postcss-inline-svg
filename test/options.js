@@ -3,8 +3,6 @@ const assert = require('assert');
 const postcss = require('postcss');
 const plugin = require('../');
 
-// encode
-
 function compare(fixture, expected, options = { encode: false }, warnings = []) {
     return postcss([
         plugin(options)
