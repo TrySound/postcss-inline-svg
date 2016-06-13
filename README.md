@@ -76,15 +76,7 @@ function encode(code) {
 
 #### options.transform(svg, path)
 
-Transforms svg after `encode` function.
-
-Default:
-
-```js
-function transform(code, id) {
-    return '"data:image/svg+xml;charset=utf-8,' + code.replace(/"/g, '\'').replace(/\s+/g, ' ').trim() + '"';
-}
-```
+Transforms svg after `encode` function and generates url.
 
 
 ## Optimisation

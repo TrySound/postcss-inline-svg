@@ -8,7 +8,11 @@ export function encode(code) {
 }
 
 function normalize(code) {
-    return code.replace(/"/g, '\'').replace(/\s+/g, ' ').trim();
+    return code
+        .replace(/'/g, '%22')
+        .replace(/"/g, '\'')
+        .replace(/\s+/g, ' ')
+        .trim();
 }
 
 export function transform(code) {

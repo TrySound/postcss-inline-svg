@@ -6,6 +6,7 @@
 * `encode` is not included in `transform` and runs before it
 * `encode` is `function` or `false`
 * `transform` can't return false
+* Fix bug with quotes [#19](https://github.com/TrySound/postcss-inline-svg/issues/19)
 
 ## 1.4.0
 
