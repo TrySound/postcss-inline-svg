@@ -9,7 +9,7 @@
     "svg",
     "inline"
   ],
-  "main": "dist/index.js",
+  "main": "dist/postcss-inline-svg.js",
   "files": [
     "dist"
   ],
@@ -33,10 +33,12 @@
     "buble": "^0.10.6",
     "eslint": "^2.0.0",
     "eslint-config-postcss": "^2.0.0",
-    "mocha": "^2.5.3"
+    "mocha": "^2.5.3",
+    "rollup": "^0.31.1",
+    "rollup-plugin-buble": "^0.10.0"
   },
   "scripts": {
-    "build": "buble src -o dist",
+    "build": "rollup -c",
     "pretest": "npm run build",
     "test": "mocha test/*.js --compilers js:buble/register",
     "posttest": "eslint src test",

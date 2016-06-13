@@ -1,6 +1,6 @@
-const { stringify } = require('postcss-value-parser');
+import { stringify } from 'postcss-value-parser';
 
-module.exports = function nodes2data(nodes) {
+export default function nodes2data(nodes) {
     const data = {};
     const args = [];
     let last = '';
@@ -54,4 +54,4 @@ module.exports = function nodes2data(nodes) {
     });
 
     return data;
-};
+}

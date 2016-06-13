@@ -1,4 +1,4 @@
-module.exports = function ast2data(ast) {
+export default function ast2data(ast) {
     const root = {};
     const selectors = {};
 
@@ -20,4 +20,4 @@ module.exports = function ast2data(ast) {
         root,
         selectors
     };
-};
+}

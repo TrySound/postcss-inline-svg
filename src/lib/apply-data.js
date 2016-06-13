@@ -1,9 +1,9 @@
-const assign = require('object-assign');
-const { parseDOM: parse } = require('htmlparser2');
-const { selectAll, selectOne } = require('css-select');
-const serialize = require('dom-serializer');
+import assign from 'object-assign';
+import { parseDOM as parse } from 'htmlparser2';
+import { selectAll, selectOne } from 'css-select';
+import serialize from 'dom-serializer';
 
-module.exports = function applyData(source, data) {
+export default function applyData(source, data) {
     const dom = parse(source, { xmlMode: true });
     const svg = dom ? selectOne('svg', dom) : null;
 
@@ -27,4 +27,4 @@ module.exports = function applyData(source, data) {
     });
 
     return serialize(dom);
-};
+}

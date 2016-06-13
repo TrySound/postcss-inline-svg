@@ -1,9 +1,9 @@
-const postcss = require('postcss');
-const valueParser = require('postcss-value-parser');
-const resolve = require('./lib/resolve');
-const loadSVG = require('./lib/load-svg');
-const ast2data = require('./lib/ast2data');
-const nodes2data = require('./lib/nodes2data');
+import postcss from 'postcss';
+import valueParser from 'postcss-value-parser';
+import resolve from './lib/resolve';
+import loadSVG from './lib/load-svg';
+import ast2data from './lib/ast2data';
+import nodes2data from './lib/nodes2data';
 
 function defineLoad(result, atrule, svgs, opts) {
     const data = ast2data(atrule);
@@ -137,4 +137,4 @@ const postcssInlineSvg = (opts = {}) => (css, result) => {
     });
 };
 
-module.exports = postcss.plugin('postcss-inline-svg', postcssInlineSvg);
+export default postcss.plugin('postcss-inline-svg', postcssInlineSvg);

@@ -1,6 +1,6 @@
-const path = require('path');
+import path from 'path';
 
-module.exports = function resolve(node, url, opts) {
+export default function resolve(node, url, opts) {
     const relative = node.source && node.source.input && node.source.input.file;
     let root;
     if (!opts.path && relative) {
@@ -9,4 +9,4 @@ module.exports = function resolve(node, url, opts) {
         root = opts.path || '.';
     }
     return path.resolve(root, url);
-};
+}
