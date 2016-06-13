@@ -1,19 +1,7 @@
 const assert = require('assert');
-const postcss = require('postcss');
-const plugin = require('../');
+const compare = require('./utils/compare.js');
 
-function compare(fixture, expected, options = { encode: false }, warnings = []) {
-    return postcss([
-        plugin(options)
-    ]).process(fixture, options).then(result => {
-        const resultWarnings = result.warnings();
-        resultWarnings.forEach((warning, index) => {
-            assert.equal(warnings[index], warning.text);
-        });
-        assert.equal(resultWarnings.length, warnings.length);
-        assert.equal(result.css, expected);
-    });
-}
+process.chdir(__dirname);
 
 describe('options', () => {
     it('should take file relatively to "from" option', () => {
