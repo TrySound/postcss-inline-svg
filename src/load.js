@@ -45,9 +45,8 @@ export default function load(item, opts) {
         if (opts.encode) {
             code = opts.encode(code);
         }
-        return {
-            id: item.name || item.url,
-            code: opts.transform(code, id)
-        };
+        item.svg = opts.transform(code, id);
+    }).catch(err => {
+        item.error = err.message;
     });
 }

@@ -6,53 +6,40 @@ import parseLoad from './parseLoad.js';
 import parseAtLoad from './parseAtLoad.js';
 import load from './load.js';
 
-function defineLoad(result, atrule, svgs, opts) {
+function grabAtLoaders(result, atrule) {
     let parsedAtLoad;
     try {
         parsedAtLoad = parseAtLoad(atrule);
     } catch (e) {
         atrule.warn(result, e.message);
-        return null;
+        return [];
     }
     parsedAtLoad.node = atrule;
-    atrule.remove();
-    return load(parsedAtLoad, opts).then(({ code }) => {
-        svgs[parsedAtLoad.name] = code;
-    }).catch(err => {
-        atrule.warn(result, err.message);
-    });
+    return [parsedAtLoad];
 }
 
-function insertLoad(result, decl, opts) {
-    const promises = [];
+function grabLoaders(result, decl) {
+    const items = [];
     decl.value.walk(node => {
         if (node.type !== 'function' || node.value !== 'svg-load') {
             return;
         }
         let parsedLoad;
         try {
-            parsedLoad = parseLoad(node, opts);
+            parsedLoad = parseLoad(node);
         } catch (e) {
             decl.warn(result, e.message);
             return;
         }
         parsedLoad.node = decl;
         parsedLoad.valueNode = node;
-        const promise = load(parsedLoad, opts).then(({ code }) => {
-            node.value = 'url';
-            node.nodes = [{
-                type: 'word',
-                value: code
-            }];
-        }).catch(err => {
-            decl.warn(result, err.message);
-        });
-        promises.push(promise);
+        items.push(parsedLoad);
     });
-    return Promise.all(promises);
+    return items;
 }
 
-function insertInline(result, decl, svgs) {
+function grabInliners(result, decl) {
+    const items = [];
     decl.value.walk(node => {
         if (node.type !== 'function' || node.value !== 'svg-inline') {
             return;
@@ -62,50 +49,83 @@ function insertInline(result, decl, svgs) {
             return;
         }
 
-        const name = node.nodes[0].value;
-        if (!svgs[name]) {
-            decl.warn(result, `"${name}" svg is not defined`);
-            return;
-        }
+        items.push({
+            name: node.nodes[0].value,
+            node: decl,
+            valueNode: node
+        });
+    });
+    return items;
+}
 
-        node.value = 'url';
-        node.nodes = [{
-            type: 'word',
-            value: svgs[name]
-        }];
+function finaliseLoaders(result, loaders) {
+    loaders.forEach(loader => {
+        if (loader.error) {
+            loader.node.warn(result, loader.error);
+        } else {
+            loader.valueNode.value = 'url';
+            loader.valueNode.nodes = [{
+                type: 'word',
+                value: loader.svg
+            }];
+        }
+    });
+}
+
+function finaliseInliners(result, atLoaders, inliners) {
+    const svgs = {};
+    atLoaders.forEach(loader => {
+        svgs[loader.name] = loader;
+        if (loader.error) {
+            loader.node.warn(result, loader.error);
+        } else {
+            loader.node.remove();
+        }
+    });
+    inliners.forEach(inliner => {
+        const loader = svgs[inliner.name];
+        if (loader && loader.svg) {
+            inliner.valueNode.value = 'url';
+            inliner.valueNode.nodes = [{
+                type: 'word',
+                value: loader.svg
+            }];
+        } else {
+            inliner.node.warn(result, `"${inliner.name}" svg is not defined`);
+        }
     });
 }
 
 export default postcss.plugin('postcss-inline-svg', opts => (css, result) => {
-    const promises = [];
-    const decls = [];
-    const svgs = {};
-
     opts = assign({
         encode,
         transform
     }, opts);
 
+    let loaders = [];
+    let atLoaders = [];
+    let inliners = [];
+
     css.walk(node => {
         if (node.type === 'atrule') {
             if (node.name === 'svg-load') {
-                promises.push(defineLoad(result, node, svgs, opts));
+                atLoaders = atLoaders.concat(grabAtLoaders(result, node));
             }
         } else if (node.type === 'decl') {
             if (node.value.indexOf('svg-load(') !== -1 ||
                 node.value.indexOf('svg-inline(') !== -1
             ) {
                 node.value = valueParser(node.value);
-                promises.push(insertLoad(result, node, opts));
-                decls.push(node);
+                loaders = loaders.concat(grabLoaders(result, node));
+                inliners = inliners.concat(grabInliners(result, node));
             }
         }
     });
 
+    const promises = [].concat(loaders, atLoaders).map(item => load(item, opts));
+
     return Promise.all(promises).then(() => {
-        decls.forEach(decl => {
-            insertInline(result, decl, svgs, opts);
-            decl.value = decl.value.toString();
-        });
+        finaliseLoaders(result, loaders);
+        finaliseInliners(result, atLoaders, inliners);
     });
 });
