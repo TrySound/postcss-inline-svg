@@ -4,8 +4,7 @@ import valueParser from 'postcss-value-parser';
 import { transform, encode } from './defaults.js';
 import parseLoad from './parseLoad.js';
 import parseAtLoad from './parseAtLoad.js';
-import resolve from './lib/resolve';
-import loadSVG from './lib/load-svg';
+import load from './load.js';
 
 function defineLoad(result, atrule, svgs, opts) {
     let parsedAtLoad;
@@ -15,19 +14,12 @@ function defineLoad(result, atrule, svgs, opts) {
         atrule.warn(result, e.message);
         return null;
     }
-
+    parsedAtLoad.node = atrule;
     atrule.remove();
-    const file = resolve(atrule, parsedAtLoad.url, opts);
-    return loadSVG(file, {
-        root: parsedAtLoad.params,
-        selectors: parsedAtLoad.selectors
-    }, opts).then(svg => {
-        if (svg) {
-            svgs[parsedAtLoad.name] = svg;
-        } else {
-            atrule.warn(result, `Invalid svg in '${file}'`);
-            return;
-        }
+    return load(parsedAtLoad, opts).then(({ code }) => {
+        svgs[parsedAtLoad.name] = code;
+    }).catch(err => {
+        atrule.warn(result, err.message);
     });
 }
 
@@ -44,15 +36,16 @@ function insertLoad(result, decl, opts) {
             decl.warn(result, e.message);
             return;
         }
-        const file = resolve(decl, parsedLoad.url, opts);
-        node.value = 'url';
-        node.nodes = [{
-            type: 'word'
-        }];
-        const promise = loadSVG(file, {
-            root: parsedLoad.params
-        }, opts).then(svg => {
-            node.nodes[0].value = svg;
+        parsedLoad.node = decl;
+        parsedLoad.valueNode = node;
+        const promise = load(parsedLoad, opts).then(({ code }) => {
+            node.value = 'url';
+            node.nodes = [{
+                type: 'word',
+                value: code
+            }];
+        }).catch(err => {
+            decl.warn(result, err.message);
         });
         promises.push(promise);
     });
