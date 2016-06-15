@@ -16,5 +16,6 @@ module.exports = function compare(fixture, expected, options = { encode: false }
         });
         assert.equal(resultWarnings.length, warnings.length);
         assert.equal(result.css, expected);
+        return result;
     });
 };

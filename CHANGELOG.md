@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.1
+
+* Stringify decl values
+
 ## 2.0.0
 
 * Code and tests refactoring

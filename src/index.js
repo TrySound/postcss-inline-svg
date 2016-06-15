@@ -96,6 +96,12 @@ function finaliseInliners(result, atLoaders, inliners) {
     });
 }
 
+function finaliseDecls(items) {
+    items.forEach(item => {
+        item.node.value = item.node.value.toString();
+    });
+}
+
 export default postcss.plugin('postcss-inline-svg', opts => (css, result) => {
     opts = assign({
         encode,
@@ -127,5 +133,6 @@ export default postcss.plugin('postcss-inline-svg', opts => (css, result) => {
     return Promise.all(promises).then(() => {
         finaliseLoaders(result, loaders);
         finaliseInliners(result, atLoaders, inliners);
+        finaliseDecls([].concat(loaders, inliners));
     });
 });

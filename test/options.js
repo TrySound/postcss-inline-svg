@@ -131,11 +131,4 @@ describe('options', () => {
             }
         );
     });
-
-    it('should resolve quotes in transform step', () => {
-        return compare(
-            `background: svg-load('fixtures/font.svg');`,
-            `background: url("data:image/svg+xml;charset=utf-8,<svg font='%22Nelvetica Neue%22, sans-serif'/>");`
-        );
-    });
 });
