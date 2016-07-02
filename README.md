@@ -83,7 +83,7 @@ Transforms svg after `encode` function and generates url.
 
 ### Why svg-load() doesn't work and the color still black (or red or whatever)?
 
-That's because svg-load() overrides attributes only in `<svg>` element and children inherit that color.
+That's because `svg-load()` overrides attributes only in `<svg>` element and children inherit that color.
 But if there is already color on children nothing will be inherited.
 
 For example
@@ -102,7 +102,7 @@ after inline-svg (fill: #000) will looks like
 </svg>
 ```
 
-There are two solutions: to remove that attribute (preferable) or to use extended @svg-load notation.
+There are two solutions: to remove that attribute (preferable) or to use extended `@svg-load` notation.
 
 ### How to optimize svg on build step?
 
