@@ -79,16 +79,53 @@ function encode(code) {
 Transforms svg after `encode` function and generates url.
 
 
-## Optimisation
+## Frequently asked questions
 
-Add [postcss-svgo](https://github.com/ben-eb/postcss-svgo)
-or [cssnano](https://github.com/ben-eb/cssnano)
-(includes postcss-svgo) in your plugin list to minify svg images automatically.
+### Why svg-load() doesn't work and the color still black (or red or whatever)?
+
+That's because svg-load() overrides attributes only in `<svg>` element and children inherit that color.
+But if there is already color on children nothing will be inherited.
+
+For example
+
+```xml
+<svg>
+    <path fill="#ff0000" d="..." />
+</svg>
+```
+
+after inline-svg (fill: #000) will looks like
+
+```xml
+<svg fill="#000">
+    <path fill="#ff0000" />
+</svg>
+```
+
+There are two solutions: to remove that attribute (preferable) or to use extended @svg-load notation.
+
+### How to optimize svg on build step?
+
+> There is a plugin. :)
+
+You are able to add [postcss-svgo](https://github.com/ben-eb/postcss-svgo) in your postcss plugins list
+which will detect every url which contains data svg uri and
+minify via [svgo](https://github.com/svg/svgo).
 
 ```js
 postcss([
     require('postcss-inline-svg'),
     require('postcss-svgo')
+])
+```
+
+Or if you use [cssnano](https://github.com/ben-eb/cssnano) your svg urls already minified
+as cssnano includes postcss-svgo.
+
+```js
+postcss([
+    require('postcss-inline-svg'),
+    require('cssnano')
 ])
 ```
 
