@@ -30,12 +30,12 @@
     "read-cache": "^1.0.0"
   },
   "devDependencies": {
-    "buble": "^0.10.6",
+    "buble": "^0.12.3",
     "eslint": "^2.0.0",
     "eslint-config-postcss": "^2.0.0",
     "mocha": "^2.5.3",
-    "rollup": "^0.31.1",
-    "rollup-plugin-buble": "^0.10.0"
+    "rollup": "^0.33.0",
+    "rollup-plugin-buble": "^0.12.1"
   },
   "scripts": {
     "build": "rollup -c",
