@@ -5,13 +5,8 @@ import { parseDOM } from 'htmlparser2';
 import { selectAll, selectOne } from 'css-select';
 import serialize from 'dom-serializer';
 
-function applyData(source, params = {}, selectors = {}) {
-    const dom = parseDOM(source, { xmlMode: true });
-    const svg = dom ? selectOne('svg', dom) : null;
-
-    if (!svg) {
-        throw Error('Invalid loaded xml format');
-    }
+function applyData(dom, params = {}, selectors = {}) {
+    const svg = selectOne('svg', dom);
 
     assign(svg.attribs, params);
 
@@ -24,7 +19,13 @@ function applyData(source, params = {}, selectors = {}) {
         });
     });
 
-    return serialize(dom);
+    return dom;
+}
+
+function removeFill(dom) {
+    selectAll('[fill]', dom).forEach(element => {
+        delete element.attribs.fill;
+    });
 }
 
 function resolveId(node, url, path) {
@@ -41,10 +42,20 @@ function resolveId(node, url, path) {
 export default function load(item, opts) {
     const id = resolveId(item.node, item.url, opts.path);
     return readCache(id, 'utf-8').then(data => {
-        let code = applyData(data, item.params, item.selectors);
+        const dom = parseDOM(data, { xmlMode: true });
+
+        if (opts.removeFill instanceof RegExp ? opts.removeFill.test(id) : opts.removeFill) {
+            removeFill(dom);
+        }
+
+        applyData(dom, item.params, item.selectors);
+
+        let code = serialize(dom);
+
         if (opts.encode) {
             code = opts.encode(code);
         }
+
         item.svg = opts.transform(code, id);
     }).catch(err => {
         item.error = err.message;

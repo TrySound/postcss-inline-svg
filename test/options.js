@@ -131,4 +131,32 @@ describe('options', () => {
             }
         );
     });
+
+    it('should remove fill attributes with removeFill: true', () => {
+        return compare(
+            `background: svg-load('fixtures/fill.svg', fill="#fff");`,
+            `background: url("data:image/svg+xml;charset=utf-8,<svg fill='#fff'> <path/> </svg>");`,
+            {
+                removeFill: true,
+                encode: false
+            }
+        );
+    });
+
+    it('should remove fill attributes with removeFill: RegExp', () => {
+        return compare(
+            `
+            background: svg-load('fixtures/fill.svg', fill="#fff");
+            background: svg-load('fixtures/fill-icon.svg', fill="#fff");
+            `,
+            `
+            background: url("data:image/svg+xml;charset=utf-8,<svg fill='#fff'> <path fill='#000'/> </svg>");
+            background: url("data:image/svg+xml;charset=utf-8,<svg fill='#fff'> <rect/> </svg>");
+            `,
+            {
+                removeFill: /-icon/,
+                encode: false
+            }
+        );
+    });
 });
