@@ -53,9 +53,14 @@ See [PostCSS] docs for examples for your environment.
 
 #### options.path
 
-Path which will resolve url.
+Path to resolve url.
 
 Default: `false` - path will be relative to source file if it was specified.
+
+#### options.removeFill
+
+Default: `false` - with `true` removes all `fill` attributes before applying specified.
+Passed RegExp filters files by id.
 
 #### options.encode(svg)
 
