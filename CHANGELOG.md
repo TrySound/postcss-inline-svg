@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.0
+
+* Add `removeFill` option to force color in pure icons
+
 ## 2.0.1
 
 * Stringify decl values
