@@ -1,8 +1,7 @@
 import { dirname, resolve } from 'path';
 import readCache from 'read-cache';
 import render from './render.js';
-import removeFill from './removeFill.js';
-import { applyRootParams, applySelectedParams } from './applyParams.js';
+import { removeFill, applyRootParams, applySelectedParams } from './processors.js';
 import { transform, encode } from './defaults.js';
 
 function resolveId(node, url, path) {
