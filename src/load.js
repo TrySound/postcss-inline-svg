@@ -1,32 +1,9 @@
 import { dirname, resolve } from 'path';
 import readCache from 'read-cache';
-import assign from 'object-assign';
-import { parseDOM } from 'htmlparser2';
-import { selectAll, selectOne } from 'css-select';
-import serialize from 'dom-serializer';
-
-function applyData(dom, params = {}, selectors = {}) {
-    const svg = selectOne('svg', dom);
-
-    assign(svg.attribs, params);
-
-    Object.keys(selectors).forEach(selector => {
-        const attribs = selectors[selector];
-        const elements = selectAll(selector, svg);
-
-        elements.forEach(element => {
-            assign(element.attribs, attribs);
-        });
-    });
-
-    return dom;
-}
-
-function removeFill(dom) {
-    selectAll('[fill]', dom).forEach(element => {
-        delete element.attribs.fill;
-    });
-}
+import render from './render.js';
+import removeFill from './removeFill.js';
+import { applyRootParams, applySelectedParams } from './applyParams.js';
+import { transform, encode } from './defaults.js';
 
 function resolveId(node, url, path) {
     const file = node.source && node.source.input && node.source.input.file;
@@ -41,22 +18,23 @@ function resolveId(node, url, path) {
 
 export default function load(item, opts) {
     const id = resolveId(item.node, item.url, opts.path);
+    const processors = [
+        removeFill(id, opts),
+        applyRootParams(item.params || {}),
+        applySelectedParams(item.selectors || {})
+    ];
     return readCache(id, 'utf-8').then(data => {
-        const dom = parseDOM(data, { xmlMode: true });
+        let code = render(data, ...processors);
 
-        if (opts.removeFill instanceof RegExp ? opts.removeFill.test(id) : opts.removeFill) {
-            removeFill(dom);
+        if (opts.encode !== false) {
+            code = (opts.encode || encode)(code);
         }
 
-        applyData(dom, item.params, item.selectors);
-
-        let code = serialize(dom);
-
-        if (opts.encode) {
-            code = opts.encode(code);
+        if (opts.transform !== false) {
+            code = (opts.transform || transform)(code, id);
         }
 
-        item.svg = opts.transform(code, id);
+        item.svg = code;
     }).catch(err => {
         item.error = err.message;
     });

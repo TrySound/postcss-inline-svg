@@ -24,7 +24,6 @@
     "css-select": "^1.2.0",
     "dom-serializer": "^0.1.0",
     "htmlparser2": "^3.9.0",
-    "object-assign": "^4.0.1",
     "postcss": "^5.0.14",
     "postcss-value-parser": "^3.2.3",
     "read-cache": "^1.0.0"

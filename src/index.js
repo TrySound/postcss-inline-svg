@@ -1,7 +1,5 @@
-import assign from 'object-assign';
 import postcss from 'postcss';
 import valueParser from 'postcss-value-parser';
-import { transform, encode } from './defaults.js';
 import parseLoad from './parseLoad.js';
 import parseAtLoad from './parseAtLoad.js';
 import load from './load.js';
@@ -102,12 +100,7 @@ function finaliseDecls(items) {
     });
 }
 
-export default postcss.plugin('postcss-inline-svg', opts => (css, result) => {
-    opts = assign({
-        encode,
-        transform
-    }, opts);
-
+export default postcss.plugin('postcss-inline-svg', (opts = {}) => (css, result) => {
     const loaders = [];
     const atLoaders = [];
     const inliners = [];
