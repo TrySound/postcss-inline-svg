@@ -4,8 +4,7 @@ import render from './render.js';
 import { removeFill, applyRootParams, applySelectedParams } from './processors.js';
 import { transform, encode } from './defaults.js';
 
-function resolveId(node, url, path) {
-    const file = node.source && node.source.input && node.source.input.file;
+function resolveId(file, url, path) {
     let base;
     if (!path && file) {
         base = dirname(file);
@@ -16,7 +15,7 @@ function resolveId(node, url, path) {
 }
 
 export default function load(item, opts) {
-    const id = resolveId(item.node, item.url, opts.path);
+    const id = resolveId(item.file, item.url, opts.path);
     const processors = [
         removeFill(id, opts),
         applyRootParams(item.params || {}),

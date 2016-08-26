@@ -8,37 +8,38 @@ function grabAtLoaders(result, atrule) {
     let parsedAtLoad;
     try {
         parsedAtLoad = parseAtLoad(atrule);
+        parsedAtLoad.file = atrule.source && atrule.source.input && atrule.source.input.file;
+        parsedAtLoad.node = atrule;
+        return [parsedAtLoad];
     } catch (e) {
         atrule.warn(result, e.message);
-        return [];
     }
-    parsedAtLoad.node = atrule;
-    return [parsedAtLoad];
+    return [];
 }
 
-function grabLoaders(result, decl) {
+function grabLoaders(result, decl, parsedValue) {
     const items = [];
-    decl.value.walk(node => {
+    parsedValue.walk(node => {
         if (node.type !== 'function' || node.value !== 'svg-load') {
             return;
         }
-        let parsedLoad;
         try {
-            parsedLoad = parseLoad(node);
+            const parsedLoad = parseLoad(node);
+            parsedLoad.file = decl.source && decl.source.input && decl.source.input.file;
+            parsedLoad.node = decl;
+            parsedLoad.valueNode = node;
+            parsedLoad.parsedValue = parsedValue;
+            items.push(parsedLoad);
         } catch (e) {
             decl.warn(result, e.message);
-            return;
         }
-        parsedLoad.node = decl;
-        parsedLoad.valueNode = node;
-        items.push(parsedLoad);
     });
     return items;
 }
 
-function grabInliners(result, decl) {
+function grabInliners(result, decl, parsedValue) {
     const items = [];
-    decl.value.walk(node => {
+    parsedValue.walk(node => {
         if (node.type !== 'function' || node.value !== 'svg-inline') {
             return;
         }
@@ -48,9 +49,11 @@ function grabInliners(result, decl) {
         }
 
         items.push({
+            file: decl.source && decl.source.input && decl.source.input.file,
             name: node.nodes[0].value,
             node: decl,
-            valueNode: node
+            valueNode: node,
+            parsedValue
         });
     });
     return items;
@@ -96,7 +99,7 @@ function finaliseInliners(result, atLoaders, inliners) {
 
 function finaliseDecls(items) {
     items.forEach(item => {
-        item.node.value = item.node.value.toString();
+        item.node.value = String(item.parsedValue);
     });
 }
 
@@ -114,9 +117,9 @@ export default postcss.plugin('postcss-inline-svg', (opts = {}) => (css, result)
             if (node.value.indexOf('svg-load(') !== -1 ||
                 node.value.indexOf('svg-inline(') !== -1
             ) {
-                node.value = valueParser(node.value);
-                loaders.push(...grabLoaders(result, node));
-                inliners.push(...grabInliners(result, node));
+                const parsedValue = valueParser(node.value);
+                loaders.push(...grabLoaders(result, node, parsedValue));
+                inliners.push(...grabInliners(result, node, parsedValue));
             }
         }
     });
