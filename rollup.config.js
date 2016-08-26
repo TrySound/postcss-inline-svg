@@ -5,7 +5,7 @@ var pkg = require('./package.json');
 export default {
     entry: 'src/index.js',
     plugins: [buble()],
-    external: Object.keys(pkg.dependencies).concat('path'),
+    external: Object.keys(pkg.dependencies).concat(['path', 'fs']),
     format: 'cjs',
     dest: pkg.main
 };
