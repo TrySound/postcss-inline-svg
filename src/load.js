@@ -1,27 +1,27 @@
-import { dirname, resolve } from 'path';
-import readCache from 'read-cache';
+import { readFile } from 'fs';
 import render from './render.js';
-import { removeFill, applyRootParams, applySelectedParams } from './processors.js';
 import { transform, encode } from './defaults.js';
+import { removeFill, applyRootParams, applySelectedParams } from './processors.js';
 
-function resolveId(file, url, path) {
-    let base;
-    if (!path && file) {
-        base = dirname(file);
-    } else {
-        base = path || '.';
-    }
-    return resolve(base, url);
+function read(id) {
+    return new Promise((resolve, reject) => {
+        readFile(id, 'utf-8', (err, data) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(data);
+            }
+        });
+    });
 }
 
-export default function load(item, opts) {
-    const id = resolveId(item.file, item.url, opts.path);
+export default function load(id, config, opts) {
     const processors = [
         removeFill(id, opts),
-        applyRootParams(item.params || {}),
-        applySelectedParams(item.selectors || {})
+        applyRootParams(config.params || {}),
+        applySelectedParams(config.selectors || {})
     ];
-    return readCache(id, 'utf-8').then(data => {
+    return read(id).then(data => {
         let code = render(data, ...processors);
 
         if (opts.encode !== false) {
@@ -32,8 +32,6 @@ export default function load(item, opts) {
             code = (opts.transform || transform)(code, id);
         }
 
-        item.svg = code;
-    }).catch(err => {
-        item.error = err.message;
+        return code;
     });
 }

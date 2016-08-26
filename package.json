@@ -25,8 +25,7 @@
     "dom-serializer": "^0.1.0",
     "htmlparser2": "^3.9.0",
     "postcss": "^5.0.14",
-    "postcss-value-parser": "^3.2.3",
-    "read-cache": "^1.0.0"
+    "postcss-value-parser": "^3.2.3"
   },
   "devDependencies": {
     "buble": "^0.13.1",
