@@ -7,7 +7,7 @@ function read(id) {
     return new Promise((resolve, reject) => {
         readFile(id, 'utf-8', (err, data) => {
             if (err) {
-                reject(err);
+                reject(Error(`Can't load '${id}'`));
             } else {
                 resolve(data);
             }

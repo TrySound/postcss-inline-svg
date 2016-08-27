@@ -35,7 +35,7 @@ describe('cases', () => {
             `background: svg-load('fixtures/not-found.svg');`,
             `background: svg-load('fixtures/not-found.svg');`,
             [
-                `ENOENT: no such file or directory, open '${path.resolve('fixtures/not-found.svg')}'`
+                `Can't load '${path.resolve('fixtures/not-found.svg')}'`
             ]
         );
     });
