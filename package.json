@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "buble": "^0.13.1",
-    "eslint": "^2.0.0",
+    "eslint": "^3.4.0",
     "eslint-config-postcss": "^2.0.0",
     "mocha": "^3.0.2",
     "rollup": "^0.34.10",
@@ -37,9 +37,10 @@
   },
   "scripts": {
     "build": "rollup -c",
-    "pretest": "npm run build",
-    "test": "mocha test/*.js --compilers js:buble/register",
-    "posttest": "eslint src test",
+    "mocha": "mocha test/*.js --compilers js:buble/register",
+    "lint": "eslint src test",
+    "test": "npm run build && npm run mocha && npm run lint",
+    "test-012": "npm run build && npm run mocha",
     "prepublish": "npm test"
   },
   "eslintConfig": {
