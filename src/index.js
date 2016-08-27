@@ -1,115 +1,49 @@
 import postcss from 'postcss';
-import valueParser from 'postcss-value-parser';
-import parseLoad from './parseLoad.js';
-import parseAtLoad from './parseAtLoad.js';
+import { parseRuleDefinition, getRuleParams } from './parseRule.js';
+import { parseDeclValue } from './parseDecl.js';
 import resolveId from './resolveId.js';
 import load from './load.js';
 
-function grabAtLoaders(atrule, opts) {
-    const file = atrule.source && atrule.source.input && atrule.source.input.file;
-    const { name, url, params, selectors } = parseAtLoad(atrule);
-    return [{
-        id: resolveId(file, url, opts),
-        name,
-        params,
-        selectors,
-        node: atrule
-    }];
+function removeLoader(loader) {
+    if (!loader.error && loader.node.type === 'atrule') {
+        loader.node.remove();
+    }
 }
 
-function grabLoaders(decl, parsedValue, opts) {
-    const file = decl.source && decl.source.input && decl.source.input.file;
-    const items = [];
-    parsedValue.walk(node => {
-        if (node.type !== 'function' || node.value !== 'svg-load') {
-            return;
-        }
-        const { url, params } = parseLoad(node);
-        items.push({
-            id: resolveId(file, url, opts),
-            params,
-            node: decl,
-            valueNode: node,
-            parsedValue
-        });
-    });
-    return items;
+function applyInliner(inliner) {
+    if (!inliner.loader.error) {
+        inliner.valueNode.value = 'url';
+        inliner.valueNode.nodes = [{
+            type: 'word',
+            value: inliner.loader.svg
+        }];
+    }
 }
 
-function grabInliners(decl, parsedValue) {
-    const items = [];
-    parsedValue.walk(node => {
-        if (node.type !== 'function' || node.value !== 'svg-inline') {
-            return;
-        }
-        if (!node.nodes.length) {
-            throw Error(`Invalid "svg-inline()" statement`);
-        }
-
-        items.push({
-            name: node.nodes[0].value,
-            node: decl,
-            valueNode: node,
-            parsedValue
-        });
-    });
-    return items;
-}
-
-function finaliseLoaders(result, loaders) {
-    loaders.forEach(loader => {
-        if (loader.error) {
-            loader.node.warn(result, loader.error);
-        } else {
-            loader.valueNode.value = 'url';
-            loader.valueNode.nodes = [{
-                type: 'word',
-                value: loader.svg
-            }];
-        }
-    });
-}
-
-function finaliseInliners(result, atLoaders, inliners) {
-    const svgs = {};
-    atLoaders.forEach(loader => {
-        svgs[loader.name] = loader;
-        if (loader.error) {
-            loader.node.warn(result, loader.error);
-        } else {
-            loader.node.remove();
-        }
-    });
-    inliners.forEach(inliner => {
-        const loader = svgs[inliner.name];
-        if (loader && loader.svg) {
-            inliner.valueNode.value = 'url';
-            inliner.valueNode.nodes = [{
-                type: 'word',
-                value: loader.svg
-            }];
-        } else {
-            inliner.node.warn(result, `"${inliner.name}" svg is not defined`);
-        }
-    });
-}
-
-function finaliseDecls(items) {
-    items.forEach(item => {
-        item.node.value = String(item.parsedValue);
-    });
+function stringifyInliner(inliner) {
+    inliner.node.value = String(inliner.parsedValue);
 }
 
 export default postcss.plugin('postcss-inline-svg', (opts = {}) => (css, result) => {
+    const loadersMap = {};
     const loaders = [];
-    const atLoaders = [];
     const inliners = [];
 
     css.walk(node => {
         if (node.type === 'atrule') {
             if (node.name === 'svg-load') {
                 try {
-                    atLoaders.push(...grabAtLoaders(node, opts));
+                    const file = node.source && node.source.input && node.source.input.file;
+                    const { name, url } = parseRuleDefinition(node.params);
+                    const { params, selectors } = getRuleParams(node);
+                    const loader = {
+                        id: resolveId(file, url, opts),
+                        params,
+                        selectors,
+                        node
+                    };
+                    loaders.push(loader);
+                    loadersMap[name] = loader;
                 } catch (e) {
                     node.warn(result, e.message);
                 }
@@ -118,10 +52,37 @@ export default postcss.plugin('postcss-inline-svg', (opts = {}) => (css, result)
             if (node.value.indexOf('svg-load(') !== -1 ||
                 node.value.indexOf('svg-inline(') !== -1
             ) {
-                const parsedValue = valueParser(node.value);
                 try {
-                    loaders.push(...grabLoaders(node, parsedValue, opts));
-                    inliners.push(...grabInliners(node, parsedValue, opts));
+                    const file = node.source && node.source.input && node.source.input.file;
+                    const statements = parseDeclValue(node.value);
+                    statements.loaders.forEach(({ url, params, valueNode, parsedValue }) => {
+                        const loader = {
+                            id: resolveId(file, url, opts),
+                            params,
+                            selectors: {},
+                            node
+                        };
+                        loaders.push(loader);
+                        inliners.push({
+                            loader,
+                            node,
+                            valueNode,
+                            parsedValue
+                        });
+                    });
+                    statements.inliners.forEach(({ name, valueNode, parsedValue }) => {
+                        const loader = loadersMap[name];
+                        if (loader) {
+                            inliners.push({
+                                loader,
+                                node,
+                                valueNode,
+                                parsedValue
+                            });
+                        } else {
+                            node.warn(result, `"${name}" svg is not defined`);
+                        }
+                    });
                 } catch (e) {
                     node.warn(result, e.message);
                 }
@@ -129,17 +90,18 @@ export default postcss.plugin('postcss-inline-svg', (opts = {}) => (css, result)
         }
     });
 
-    const promises = [].concat(loaders, atLoaders).map(item => {
-        return load(item.id, item, opts).then(code => {
-            item.svg = code;
+    const promises = loaders.map(loader => {
+        return load(loader.id, loader.params, loader.selectors, opts).then(code => {
+            loader.svg = code;
         }).catch(err => {
-            item.error = err.message;
+            loader.error = true;
+            loader.node.warn(result, err.message);
         });
     });
 
     return Promise.all(promises).then(() => {
-        finaliseLoaders(result, loaders);
-        finaliseInliners(result, atLoaders, inliners);
-        finaliseDecls([].concat(loaders, inliners));
+        loaders.forEach(removeLoader);
+        inliners.forEach(applyInliner);
+        inliners.forEach(stringifyInliner);
     });
 });

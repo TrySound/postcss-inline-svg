@@ -1,11 +1,7 @@
 import valueParser from 'postcss-value-parser';
 
-function invalid() {
-    throw Error('Invalid "@svg-load" definition');
-}
-
-export default function parseAtLoad(stmt) {
-    const { nodes } = valueParser(stmt.params);
+export function parseRuleDefinition(params) {
+    const { nodes } = valueParser(params);
     if (nodes.length !== 3 ||
         nodes[0].type !== 'word' ||
         nodes[1].type !== 'space' ||
@@ -13,14 +9,19 @@ export default function parseAtLoad(stmt) {
         nodes[2].value !== 'url' ||
         nodes[2].nodes.length === 0
     ) {
-        invalid();
+        throw Error('Invalid "@svg-load" definition');
     }
-    const name = nodes[0].value;
-    const url = nodes[2].nodes[0].value;
+    return {
+        name: nodes[0].value,
+        url: nodes[2].nodes[0].value
+    };
+}
+
+export function getRuleParams(rule) {
     const params = {};
     const selectors = {};
 
-    stmt.each(node => {
+    rule.each(node => {
         if (node.type === 'decl') {
             params[node.prop] = node.value;
         } else if (node.type === 'rule') {
@@ -35,8 +36,6 @@ export default function parseAtLoad(stmt) {
     });
 
     return {
-        name,
-        url,
         params,
         selectors
     };
