@@ -1,3 +1,4 @@
+const path = require('path');
 const assert = require('assert');
 const compare = require('./utils/compare.js');
 
@@ -27,5 +28,15 @@ describe('cases', () => {
                 assert.equal(typeof decl.value, 'string');
             });
         });
+    });
+
+    it('should warn on not found file', () => {
+        return compare(
+            `background: svg-load('fixtures/not-found.svg');`,
+            `background: svg-load('fixtures/not-found.svg');`,
+            [
+                `ENOENT: no such file or directory, open '${path.resolve('fixtures/not-found.svg')}'`
+            ]
+        );
     });
 });

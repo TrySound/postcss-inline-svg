@@ -14,11 +14,17 @@ describe('short syntax', () => {
         const fixtures = `
             background: svg-load();
             background: svg-load('fixtures/basic.svg', );
+            background: svg-load('fixtures/basic.svg', fn());
+            background: svg-load(a'fixtures/basic.svg', );
+            background: svg-load(,'fixtures/basic.svg', );
         `;
         return compare(
             fixtures,
             fixtures,
             [
+                'Invalid "svg-load()" definition',
+                'Invalid "svg-load()" definition',
+                'Invalid "svg-load()" definition',
                 'Invalid "svg-load()" definition',
                 'Invalid "svg-load()" definition'
             ]
@@ -63,6 +69,7 @@ describe('short syntax', () => {
         const fixtures = `
             background: svg-load('fixtures/basic.svg', fill: #fff, stroke=#000);
             background: svg-load('fixtures/basic.svg', fill=#fff, stroke: #000);
+            background: svg-load('fixtures/basic.svg', fill::#fff);
             background: svg-load('fixtures/basic.svg', fill #fff);
             background: svg-load('fixtures/basic.svg', fill-#fff);
         `;
@@ -72,6 +79,7 @@ describe('short syntax', () => {
             [
                 'Expected ":" separator in "stroke=#000"',
                 'Expected "=" separator in "stroke: #000"',
+                'Expected ":" separator in "fill::#fff"',
                 'Expected ":" or "=" separator in "fill #fff"',
                 'Expected ":" or "=" separator in "fill-#fff"'
             ]

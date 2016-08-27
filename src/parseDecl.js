@@ -74,11 +74,8 @@ function splitParams(list) {
         }
 
         const pair = arg.split(sep);
-        if (pair.length === 1) {
-            throw Error(`Expected "${sep}" separator in "${arg}"`);
-        }
         if (pair.length !== 2) {
-            throw Error(`Expected ":" or "=" separator in "${arg}"`);
+            throw Error(`Expected "${sep}" separator in "${arg}"`);
         }
         params[pair[0].trim()] = pair[1].trim();
 
