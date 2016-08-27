@@ -40,8 +40,7 @@
     "mocha": "mocha test/*.js --compilers js:buble/register",
     "lint": "eslint src test",
     "test": "npm run build && npm run mocha && npm run lint",
-    "test-012": "npm run build && npm run mocha",
-    "prepublish": "npm test"
+    "test-012": "npm run build && npm run mocha"
   },
   "eslintConfig": {
     "extends": "postcss",
