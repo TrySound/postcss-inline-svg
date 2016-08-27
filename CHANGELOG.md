@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.1.1
+
+* Customize `ENOENT` error
+* Codebase refactoring
+
 ## 2.1.0
 
 * Add `removeFill` option to force color in pure icons

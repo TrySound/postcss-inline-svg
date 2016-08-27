@@ -21,7 +21,9 @@ function applyInliner(inliner) {
 }
 
 function stringifyInliner(inliner) {
-    inliner.node.value = String(inliner.parsedValue);
+    if (!inliner.loader.error) {
+        inliner.node.value = String(inliner.parsedValue);
+    }
 }
 
 export default postcss.plugin('postcss-inline-svg', (opts = {}) => (css, result) => {
