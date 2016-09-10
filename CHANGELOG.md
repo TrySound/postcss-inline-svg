@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.2
+
+* Allow color functions in short syntax
+
 ## 2.1.1
 
 * Customize `ENOENT` error
