@@ -36,20 +36,17 @@ function getUrl(nodes) {
 function getParamChunks(nodes) {
     const list = [];
     const lastArg = nodes.reduce((arg, node) => {
-        if (node.type === 'div') {
-            if (node.value === ',') {
-                list.push(arg);
-                return '';
-            }
-            return arg + stringify(node);
-        }
         if (node.type === 'word' || node.type === 'string') {
             return arg + node.value;
         }
         if (node.type === 'space') {
             return arg + ' ';
         }
-        throw Error(invalidDeclLoad);
+        if (node.type === 'div' && node.value === ',') {
+            list.push(arg);
+            return '';
+        }
+        return arg + stringify(node);
     }, '');
 
     return list.concat(lastArg);

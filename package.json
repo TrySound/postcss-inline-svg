@@ -38,7 +38,7 @@
   },
   "scripts": {
     "build": "rollup -c",
-    "mocha": "nyc mocha test/*.js",
+    "mocha": "nyc mocha",
     "lint": "eslint src test",
     "report": "nyc report --reporter=html",
     "test": "npm run build && npm run mocha && npm run lint",

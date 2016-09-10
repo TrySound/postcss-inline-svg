@@ -7,5 +7,6 @@ export default {
     plugins: [buble()],
     external: Object.keys(pkg.dependencies).concat(['path', 'fs']),
     format: 'cjs',
+    sourceMap: true,
     dest: pkg.main
 };

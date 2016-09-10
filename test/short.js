@@ -14,7 +14,6 @@ describe('short syntax', () => {
         const fixtures = `
             background: svg-load();
             background: svg-load('fixtures/basic.svg', );
-            background: svg-load('fixtures/basic.svg', fn());
             background: svg-load(a'fixtures/basic.svg', );
             background: svg-load(,'fixtures/basic.svg', );
         `;
@@ -22,7 +21,6 @@ describe('short syntax', () => {
             fixtures,
             fixtures,
             [
-                'Invalid "svg-load()" definition',
                 'Invalid "svg-load()" definition',
                 'Invalid "svg-load()" definition',
                 'Invalid "svg-load()" definition',
@@ -72,6 +70,7 @@ describe('short syntax', () => {
             background: svg-load('fixtures/basic.svg', fill::#fff);
             background: svg-load('fixtures/basic.svg', fill #fff);
             background: svg-load('fixtures/basic.svg', fill-#fff);
+            background: svg-load('fixtures/basic.svg', fn());
         `;
         return compare(
             fixtures,
@@ -81,7 +80,8 @@ describe('short syntax', () => {
                 'Expected "=" separator in "stroke: #000"',
                 'Expected ":" separator in "fill::#fff"',
                 'Expected ":" or "=" separator in "fill #fff"',
-                'Expected ":" or "=" separator in "fill-#fff"'
+                'Expected ":" or "=" separator in "fill-#fff"',
+                'Expected ":" or "=" separator in "fn()"'
             ]
         );
     });
@@ -90,6 +90,13 @@ describe('short syntax', () => {
         return compare(
             `background: svg-load('fixtures/basic-black.svg', fill=#fff);`,
             `background: url("data:image/svg+xml;charset=utf-8,<svg id='basic-black' fill='#fff'/>");`
+        );
+    });
+
+    it('should compile color functions', () => {
+        return compare(
+            `background: svg-load('fixtures/basic.svg', fill=rgb(255, 0, 0));`,
+            `background: url("data:image/svg+xml;charset=utf-8,<svg id='basic' fill='rgb(255, 0, 0)'/>");`
         );
     });
 });
