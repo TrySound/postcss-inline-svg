@@ -95,6 +95,10 @@ export default postcss.plugin('postcss-inline-svg', (opts = {}) => (css, result)
     const promises = loaders.map(loader => {
         return load(loader.id, loader.params, loader.selectors, opts).then(code => {
             loader.svg = code;
+            result.messages.push({
+                type: 'dependency',
+                file: loader.id
+            });
         }).catch(err => {
             loader.error = true;
             loader.node.warn(result, err.message);

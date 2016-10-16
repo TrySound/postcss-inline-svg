@@ -39,4 +39,46 @@ describe('cases', () => {
             ]
         );
     });
+
+    it('should add message about dependency', () => {
+        return compare(
+            `
+            background: svg-load('fixtures/basic.svg');
+            @svg-load icon url('fixtures/basic-black.svg') {}
+            `,
+            `
+            background: url("data:image/svg+xml;charset=utf-8,<svg id='basic'/>")
+            `
+        ).then(result => {
+            const messages = result.messages
+                .filter(message => message.type === 'dependency')
+                .map(message => message.file);
+            assert.deepEqual(messages, [
+                path.resolve('fixtures/basic.svg'),
+                path.resolve('fixtures/basic-black.svg')
+            ]);
+        });
+    });
+
+    it('should not add message about not found dependency', () => {
+        return compare(
+            `
+            background: svg-load('fixtures/not-found.svg');
+            @svg-load icon url('fixtures/not-found.svg') {}
+            `,
+            `
+            background: svg-load('fixtures/not-found.svg');
+            @svg-load icon url('fixtures/not-found.svg') {}
+            `,
+            [
+                `Can't load '${path.resolve('fixtures/not-found.svg')}'`,
+                `Can't load '${path.resolve('fixtures/not-found.svg')}'`
+            ]
+        ).then(result => {
+            const messages = result.messages
+                .filter(message => message.type === 'dependency')
+                .map(message => message.file);
+            assert.deepEqual(messages, []);
+        });
+    });
 });
