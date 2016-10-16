@@ -52,10 +52,11 @@ describe('cases', () => {
         ).then(result => {
             const messages = result.messages
                 .filter(message => message.type === 'dependency')
-                .map(message => message.file);
+                .map(message => message.file)
+                .sort();
             assert.deepEqual(messages, [
-                path.resolve('fixtures/basic.svg'),
-                path.resolve('fixtures/basic-black.svg')
+                path.resolve('fixtures/basic-black.svg'),
+                path.resolve('fixtures/basic.svg')
             ]);
         });
     });
@@ -77,7 +78,8 @@ describe('cases', () => {
         ).then(result => {
             const messages = result.messages
                 .filter(message => message.type === 'dependency')
-                .map(message => message.file);
+                .map(message => message.file)
+                .sort();
             assert.deepEqual(messages, []);
         });
     });
