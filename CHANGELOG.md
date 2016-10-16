@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.2.0
+
+* Add dependency message for bundlers
+
 ## 2.1.2
 
 * Allow color functions in short syntax
