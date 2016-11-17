@@ -52,11 +52,11 @@ describe('cases', () => {
         ).then(result => {
             const messages = result.messages
                 .filter(message => message.type === 'dependency')
-                .map(message => message.file)
+                .map(message => [message.file, message.parent])
                 .sort();
             assert.deepEqual(messages, [
-                path.resolve('fixtures/basic-black.svg'),
-                path.resolve('fixtures/basic.svg')
+                [path.resolve('fixtures/basic-black.svg'), undefined],
+                [path.resolve('fixtures/basic.svg'), undefined]
             ]);
         });
     });
@@ -81,6 +81,31 @@ describe('cases', () => {
                 .map(message => message.file)
                 .sort();
             assert.deepEqual(messages, []);
+        });
+    });
+
+    it('should add parent in dependency message if specified', () => {
+        return compare(
+            `
+            background: svg-load('basic.svg');
+            @svg-load icon url('basic-black.svg') {}
+            `,
+            `
+            background: url("data:image/svg+xml;charset=utf-8,<svg id='basic'/>")
+            `,
+            {
+                from: 'fixtures/file.css',
+                encode: false
+            }
+        ).then(result => {
+            const messages = result.messages
+                .filter(message => message.type === 'dependency')
+                .map(message => message.parent)
+                .sort();
+            assert.deepEqual(messages, [
+                path.resolve('fixtures/file.css'),
+                path.resolve('fixtures/file.css')
+            ]);
         });
     });
 });
