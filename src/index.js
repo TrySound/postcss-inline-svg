@@ -40,6 +40,7 @@ export default postcss.plugin('postcss-inline-svg', (opts = {}) => (css, result)
                     const { params, selectors } = getRuleParams(node);
                     const loader = {
                         id: resolveId(file, url, opts),
+                        parent: file,
                         params,
                         selectors,
                         node
@@ -60,6 +61,7 @@ export default postcss.plugin('postcss-inline-svg', (opts = {}) => (css, result)
                     statements.loaders.forEach(({ url, params, valueNode, parsedValue }) => {
                         const loader = {
                             id: resolveId(file, url, opts),
+                            parent: file,
                             params,
                             selectors: {},
                             node
@@ -97,7 +99,8 @@ export default postcss.plugin('postcss-inline-svg', (opts = {}) => (css, result)
             loader.svg = code;
             result.messages.push({
                 type: 'dependency',
-                file: loader.id
+                file: loader.id,
+                parent: loader.parent
             });
         }).catch(err => {
             loader.error = true;
