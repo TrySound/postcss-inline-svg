@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.3.0
+
+* Add parent prop in dependency message
+
 ## 2.2.0
 
 * Add dependency message for bundlers
