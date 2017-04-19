@@ -83,6 +83,10 @@ function encode(code) {
 
 Transforms svg after `encode` function and generates url.
 
+#### options.base64
+
+Encodes svg with base64. `transform` and `encode` are disabled. Default `false`.
+
 
 ## Frequently asked questions
 

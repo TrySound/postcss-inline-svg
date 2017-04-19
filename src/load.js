@@ -24,12 +24,17 @@ export default function load(id, params, selectors, opts) {
     return read(id).then(data => {
         let code = render(data, ...processors);
 
-        if (opts.encode !== false) {
-            code = (opts.encode || encode)(code);
-        }
+        if (opts.base64) {
+            let converted = new Buffer(code);
+            code = "\"data:image/svg+xml;base64," + converted.toString('base64') + "\"";
+        } else {
+            if (opts.encode !== false) {
+                code = (opts.encode || encode)(code);
+            }
 
-        if (opts.transform !== false) {
-            code = (opts.transform || transform)(code, id);
+            if (opts.transform !== false) {
+                code = (opts.transform || transform)(code, id);
+            }
         }
 
         return code;

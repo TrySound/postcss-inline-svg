@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.3.1
+* Add base64 encoding option
+
 ## 2.3.0
 
 * Add parent prop in dependency message
