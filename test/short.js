@@ -14,17 +14,17 @@ describe('short syntax', () => {
         const fixtures = `
             background: svg-load();
             background: svg-load('fixtures/basic.svg', );
-            background: svg-load(a'fixtures/basic.svg', );
-            background: svg-load(,'fixtures/basic.svg', );
+            background: svg-load(a'fixtures/basic.svg');
+            background: svg-load(,'fixtures/basic.svg');
         `;
         return compare(
             fixtures,
             fixtures,
             [
-                'Invalid "svg-load()" definition',
-                'Invalid "svg-load()" definition',
-                'Invalid "svg-load()" definition',
-                'Invalid "svg-load()" definition'
+                `Invalid "svg-load()" statement`,
+                `Expected parameter`,
+                `Invalid "svg-load(a'fixtures/basic.svg')" definition`,
+                `Invalid "svg-load(,'fixtures/basic.svg')" definition`
             ]
         );
     });

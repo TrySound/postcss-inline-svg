@@ -1,7 +1,5 @@
 import valueParser, { stringify } from 'postcss-value-parser';
 
-const invalidDeclLoad = `Invalid "svg-load()" definition`;
-
 function getUrl(nodes) {
     let url = '';
     let urlEnd = 0;
@@ -10,7 +8,7 @@ function getUrl(nodes) {
         const node = nodes[i];
         if (node.type === 'string') {
             if (i !== 0) {
-                throw Error(invalidDeclLoad);
+                throw Error(`Invalid "svg-load(${stringify(nodes)})" definition`);
             }
             url = node.value;
             urlEnd = i + 1;
@@ -18,7 +16,7 @@ function getUrl(nodes) {
         }
         if (node.type === 'div' && node.value === ',') {
             if (i === 0) {
-                throw Error(invalidDeclLoad);
+                throw Error(`Invalid "svg-load(${stringify(nodes)})" definition`);
             }
             urlEnd = i;
             break;
@@ -57,7 +55,7 @@ function splitParams(list) {
 
     list.reduce((sep, arg) => {
         if (!arg) {
-            throw Error(invalidDeclLoad);
+            throw Error(`Expected parameter`);
         }
 
         if (!sep) {
@@ -84,7 +82,7 @@ function splitParams(list) {
 
 function getLoader(parsedValue, valueNode) {
     if (!valueNode.nodes.length) {
-        throw Error(invalidDeclLoad);
+        throw Error(`Invalid "svg-load()" statement`);
     }
 
     // parse url
