@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.3.1
+
+* Warn more descriptive messages
+
 ## 2.3.0
 
 * Add parent prop in dependency message
