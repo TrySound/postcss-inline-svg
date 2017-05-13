@@ -1,3 +1,4 @@
+/* eslint-env mocha */
 const path = require('path');
 const assert = require('assert');
 const compare = require('./utils/compare.js');

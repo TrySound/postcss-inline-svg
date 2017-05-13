@@ -1,3 +1,4 @@
+/* eslint-env mocha */
 const compare = require('./utils/compare.js');
 
 process.chdir(__dirname);

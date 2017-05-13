@@ -1,12 +1,13 @@
-import buble from 'rollup-plugin-buble';
+import babel from 'rollup-plugin-babel';
 
-var pkg = require('./package.json');
+const pkg = require('./package.json');
 
 export default {
     entry: 'src/index.js',
-    plugins: [buble()],
+    plugins: [
+        babel()
+    ],
     external: Object.keys(pkg.dependencies).concat(['path', 'fs']),
     format: 'cjs',
-    sourceMap: true,
     dest: pkg.main
 };
