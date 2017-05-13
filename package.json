@@ -15,11 +15,12 @@
   ],
   "scripts": {
     "build": "rollup -c",
-    "mocha": "nyc mocha",
-    "lint": "eslint src test",
-    "report": "nyc report --reporter=html",
-    "test": "npm run build && npm run mocha && npm run lint",
-    "test-012": "npm run build && npm run mocha"
+    "pretest": "rollup -c",
+    "test": "jest --coverage",
+    "posttest": "eslint src test"
+  },
+  "jest": {
+    "coverageDirectory": "coverage"
   },
   "babel": {
     "presets": [
@@ -63,8 +64,7 @@
     "babel-preset-env": "^1.4.0",
     "eslint": "^3.4.0",
     "eslint-config-postcss": "^2.0.0",
-    "mocha": "^3.0.2",
-    "nyc": "^8.1.0",
+    "jest": "^20.0.1",
     "rollup": "^0.34.10",
     "rollup-plugin-babel": "^2.7.1"
   }
