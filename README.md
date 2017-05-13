@@ -103,11 +103,11 @@ after inline-svg (fill: #000) will looks like
 
 ```xml
 <svg fill="#000">
-    <path fill="#ff0000" />
+    <path fill="#ff0000" d="..." />
 </svg>
 ```
 
-There are two solutions: to remove that attribute (preferable) or to use extended `@svg-load` notation.
+There are three solutions: to remove that attribute (preferable), to use extended `@svg-load` notation or to use removeFill option.
 
 ### How to optimize svg on build step?
 
