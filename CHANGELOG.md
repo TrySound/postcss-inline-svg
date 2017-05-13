@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.0
+
+* Upgrade to postcss 6
+
 ## 2.3.1
 
 * Warn more descriptive messages
