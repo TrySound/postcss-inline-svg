@@ -57,6 +57,12 @@ Path to resolve url.
 
 Default: `false` - path will be relative to source file if it was specified.
 
+#### options.paths
+
+Array of paths to resolve url. Paths are tried in order, until an existing file is found.
+
+Default: `false` - path will be relative to source file if it was specified.
+
 #### options.removeFill
 
 Default: `false` - with `true` removes all `fill` attributes before applying specified.
