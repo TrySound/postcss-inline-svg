@@ -23,6 +23,24 @@ describe('options', () => {
         );
     });
 
+    it('should take file relatively to "paths" option', () => {
+        return compare(
+            `
+            @svg-load icon url(basic.svg) {}
+            background: svg-load('basic.svg');
+            background: svg-inline(icon);
+            `,
+            `
+            background: url("data:image/svg+xml;charset=utf-8,<svg id='basic'/>");
+            background: url("data:image/svg+xml;charset=utf-8,<svg id='basic'/>");
+            `,
+            {
+                encode: false,
+                paths: ['./does_not_exist', './fixtures']
+            }
+        );
+    });
+
     it('should take file relatively to "path" option', () => {
         return compare(
             `
