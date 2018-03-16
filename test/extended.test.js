@@ -13,8 +13,8 @@ describe('extended syntax', () => {
             background: svg-inline(icon2);
             `,
             `
-            background: url("data:image/svg+xml;charset=utf-8,<svg id='basic'/>");
-            background: url("data:image/svg+xml;charset=utf-8,<svg id='basic'/>");
+            background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
+            background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
             `
         );
     });
@@ -65,7 +65,7 @@ describe('extended syntax', () => {
             background: svg-inline(icon);
             `,
             `
-            background: url("data:image/svg+xml;charset=utf-8,<svg id='basic' fill='#fff' stroke='#000'/>");
+            background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic' fill='#fff' stroke='#000'/>");
             `
         );
     });
@@ -80,7 +80,7 @@ describe('extended syntax', () => {
             background: svg-inline(icon);
             `,
             `
-            background: url("data:image/svg+xml;charset=utf-8,<svg id='basic-black' fill='#fff' stroke='#000'/>");
+            background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic-black' fill='#fff' stroke='#000'/>");
             `
         );
     });
@@ -96,7 +96,7 @@ describe('extended syntax', () => {
             background: svg-inline(icon);
             `,
             `
-            background: url("data:image/svg+xml;charset=utf-8,<svg id='path'><path class='g1' fill='#fff'/><path class='g1' fill='#fff'/><path fill='#fff'/></svg>");
+            background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='path'><path class='g1' fill='#fff'/><path class='g1' fill='#fff'/><path fill='#fff'/></svg>");
             `
         );
     });
@@ -112,7 +112,7 @@ describe('extended syntax', () => {
             background: svg-inline(icon);
             `,
             `
-            background: url("data:image/svg+xml;charset=utf-8,<svg id='path'><path class='g1' fill='#fff'/><path class='g1' fill='#fff'/><path fill='#000'/></svg>");
+            background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='path'><path class='g1' fill='#fff'/><path class='g1' fill='#fff'/><path fill='#000'/></svg>");
             `
         );
     });

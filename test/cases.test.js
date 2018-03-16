@@ -9,7 +9,7 @@ describe('cases', () => {
     it('should resolve quotes in transform step', () => {
         return compare(
             `background: svg-load('fixtures/font.svg');`,
-            `background: url("data:image/svg+xml;charset=utf-8,<svg font='%22Nelvetica Neue%22, sans-serif'/>");`
+            `background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' font='%22Nelvetica Neue%22, sans-serif'/>");`
         );
     });
 
@@ -21,8 +21,8 @@ describe('cases', () => {
             background: svg-load('fixtures/basic.svg');
             `,
             `
-            background: url("data:image/svg+xml;charset=utf-8,<svg id='basic'/>");
-            background: url("data:image/svg+xml;charset=utf-8,<svg id='basic'/>");
+            background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
+            background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
             `
         ).then(result => {
             result.root.walkDecls(decl => {
@@ -48,7 +48,7 @@ describe('cases', () => {
             @svg-load icon url('fixtures/basic-black.svg') {}
             `,
             `
-            background: url("data:image/svg+xml;charset=utf-8,<svg id='basic'/>")
+            background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>")
             `
         ).then(result => {
             const messages = result.messages
@@ -92,7 +92,7 @@ describe('cases', () => {
             @svg-load icon url('basic-black.svg') {}
             `,
             `
-            background: url("data:image/svg+xml;charset=utf-8,<svg id='basic'/>")
+            background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>")
             `,
             {
                 from: 'fixtures/file.css',

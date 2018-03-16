@@ -7,7 +7,7 @@ describe('short syntax', () => {
     it('should compile basic', () => {
         return compare(
             `background: svg-load('fixtures/basic.svg');`,
-            `background: url("data:image/svg+xml;charset=utf-8,<svg id='basic'/>");`
+            `background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");`
         );
     });
 
@@ -33,7 +33,7 @@ describe('short syntax', () => {
     it('should compile fill param', () => {
         return compare(
             `background: svg-load('fixtures/basic.svg', fill=#fff);`,
-            `background: url("data:image/svg+xml;charset=utf-8,<svg id='basic' fill='#fff'/>");`
+            `background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic' fill='#fff'/>");`
         );
     });
 
@@ -44,8 +44,8 @@ describe('short syntax', () => {
             background: svg-load(fixtures/basic.svg, fill=#fff);
             `,
             `
-            background: url("data:image/svg+xml;charset=utf-8,<svg id='basic'/>");
-            background: url("data:image/svg+xml;charset=utf-8,<svg id='basic' fill='#fff'/>");
+            background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
+            background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic' fill='#fff'/>");
             `
         );
     });
@@ -53,14 +53,14 @@ describe('short syntax', () => {
     it('should compile fill and stroke param', () => {
         return compare(
             `background: svg-load('fixtures/basic.svg', fill=#fff, stroke=#000);`,
-            `background: url("data:image/svg+xml;charset=utf-8,<svg id='basic' fill='#fff' stroke='#000'/>");`
+            `background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic' fill='#fff' stroke='#000'/>");`
         );
     });
 
     it('should compile fill param with colon syntax', () => {
         return compare(
             `background: svg-load('fixtures/basic.svg', fill: #fff);`,
-            `background: url("data:image/svg+xml;charset=utf-8,<svg id='basic' fill='#fff'/>");`
+            `background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic' fill='#fff'/>");`
         );
     });
 
@@ -90,14 +90,14 @@ describe('short syntax', () => {
     it('should override fill param', () => {
         return compare(
             `background: svg-load('fixtures/basic-black.svg', fill=#fff);`,
-            `background: url("data:image/svg+xml;charset=utf-8,<svg id='basic-black' fill='#fff'/>");`
+            `background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic-black' fill='#fff'/>");`
         );
     });
 
     it('should compile color functions', () => {
         return compare(
             `background: svg-load('fixtures/basic.svg', fill=rgb(255, 0, 0));`,
-            `background: url("data:image/svg+xml;charset=utf-8,<svg id='basic' fill='rgb(255, 0, 0)'/>");`
+            `background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic' fill='rgb(255, 0, 0)'/>");`
         );
     });
 });
