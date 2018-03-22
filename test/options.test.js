@@ -13,8 +13,8 @@ describe('options', () => {
             background: svg-inline(icon);
             `,
             `
-            background: url("data:image/svg+xml;charset=utf-8,<svg id='basic'/>");
-            background: url("data:image/svg+xml;charset=utf-8,<svg id='basic'/>");
+            background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
+            background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
             `,
             {
                 encode: false,
@@ -31,8 +31,8 @@ describe('options', () => {
             background: svg-inline(icon);
             `,
             `
-            background: url("data:image/svg+xml;charset=utf-8,<svg id='basic'/>");
-            background: url("data:image/svg+xml;charset=utf-8,<svg id='basic'/>");
+            background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
+            background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
             `,
             {
                 encode: false,
@@ -49,13 +49,33 @@ describe('options', () => {
             background: svg-inline(icon);
             `,
             `
-            background: url("data:image/svg+xml;charset=utf-8,<svg id='basic'/>");
-            background: url("data:image/svg+xml;charset=utf-8,<svg id='basic'/>");
+            background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
+            background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
             `,
             {
                 encode: false,
                 from: './fixtures/deeper/index.css',
                 path: './fixtures'
+            }
+        );
+    });
+
+    it('should ignore xmlns absence', () => {
+        return compare(
+            `background: svg-load('fixtures/basic.svg');`,
+            `background: url("data:image/svg+xml;charset=utf-8,%3Csvg id='basic'/%3E");`,
+            {
+                xmlnsize: false
+            }
+        );
+    });
+
+    it('should skip adding of xmlns if it is present in file', () => {
+        return compare(
+            `background: svg-load('fixtures/basic-with-xmlns.svg');`,
+            `background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic-with-xmls'/>");`,
+            {
+                encode: false
             }
         );
     });
@@ -75,6 +95,7 @@ describe('options', () => {
             `,
             {
                 encode: false,
+                xmlnsize: false,
                 transform(result, file) {
                     assert.equal(result, '<svg id="basic" fill="#fff"/>');
                     return file.split(/\\|\//).pop() + ': transformed content';
@@ -91,8 +112,8 @@ describe('options', () => {
             background: svg-inline(icon);
             `,
             `
-            background: url("data:image/svg+xml;charset=utf-8,%3Csvg id='basic'/%3E");
-            background: url("data:image/svg+xml;charset=utf-8,%3Csvg id='basic'/%3E");
+            background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/%3E");
+            background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/%3E");
             `,
             {}
         );
@@ -111,7 +132,7 @@ describe('options', () => {
             `,
             {
                 encode(code) {
-                    assert.equal(code, `<svg id="basic"/>`);
+                    assert.equal(code, `<svg xmlns="http://www.w3.org/2000/svg" id="basic"/>`);
                     return '1234567890';
                 }
             }
@@ -136,7 +157,7 @@ describe('options', () => {
     it('should remove fill attributes with removeFill: true', () => {
         return compare(
             `background: svg-load('fixtures/fill.svg', fill="#fff");`,
-            `background: url("data:image/svg+xml;charset=utf-8,<svg fill='#fff'> <path/> </svg>");`,
+            `background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' fill='#fff'> <path/> </svg>");`,
             {
                 removeFill: true,
                 encode: false
@@ -151,8 +172,8 @@ describe('options', () => {
             background: svg-load('fixtures/fill-icon.svg', fill="#fff");
             `,
             `
-            background: url("data:image/svg+xml;charset=utf-8,<svg fill='#fff'> <path fill='#000'/> </svg>");
-            background: url("data:image/svg+xml;charset=utf-8,<svg fill='#fff'> <rect/> </svg>");
+            background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' fill='#fff'> <path fill='#000'/> </svg>");
+            background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' fill='#fff'> <rect/> </svg>");
             `,
             {
                 removeFill: /-icon/,
