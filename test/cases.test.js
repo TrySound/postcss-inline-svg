@@ -8,7 +8,8 @@ describe("cases", () => {
   it("should resolve quotes in transform step", () => {
     return compare(
       `background: svg-load('fixtures/font.svg');`,
-      `background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' font='%22Nelvetica Neue%22, sans-serif'/>");`
+      `background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' font='%22Nelvetica Neue%22, sans-serif'/>");`,
+      { from: "input.css", encode: false }
     );
   });
 
@@ -22,7 +23,8 @@ describe("cases", () => {
       `
       background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
       background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
-      `
+      `,
+      { from: "input.css", encode: false }
     ).then(result => {
       result.root.walkDecls(decl => {
         expect(typeof decl.value).toEqual("string");
@@ -34,6 +36,7 @@ describe("cases", () => {
     return compare(
       `background: svg-load('fixtures/not-found.svg');`,
       `background: svg-load('fixtures/not-found.svg');`,
+      { from: "input.css", encode: false },
       [`Can't load '${path.resolve("fixtures/not-found.svg")}'`]
     );
   });
@@ -46,15 +49,16 @@ describe("cases", () => {
       `,
       `
       background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>")
-      `
+      `,
+      { from: "input.css", encode: false }
     ).then(result => {
       const messages = result.messages
         .filter(message => message.type === "dependency")
         .map(message => [message.file, message.parent])
         .sort();
       expect(messages).toEqual([
-        [path.resolve("fixtures/basic-black.svg"), undefined],
-        [path.resolve("fixtures/basic.svg"), undefined]
+        [path.resolve("fixtures/basic-black.svg"), path.resolve("input.css")],
+        [path.resolve("fixtures/basic.svg"), path.resolve("input.css")]
       ]);
     });
   });
@@ -69,6 +73,7 @@ describe("cases", () => {
       background: svg-load('fixtures/not-found.svg');
       @svg-load icon url('fixtures/not-found.svg') {}
       `,
+      { from: "input.css", encode: false },
       [
         `Can't load '${path.resolve("fixtures/not-found.svg")}'`,
         `Can't load '${path.resolve("fixtures/not-found.svg")}'`
@@ -91,10 +96,7 @@ describe("cases", () => {
       `
       background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>")
       `,
-      {
-        from: "fixtures/file.css",
-        encode: false
-      }
+      { from: "fixtures/file.css", encode: false }
     ).then(result => {
       const messages = result.messages
         .filter(message => message.type === "dependency")

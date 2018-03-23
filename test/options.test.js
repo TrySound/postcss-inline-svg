@@ -15,10 +15,7 @@ describe("options", () => {
       background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
       background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
       `,
-      {
-        encode: false,
-        from: "./fixtures/index.css"
-      }
+      { from: "./fixtures/index.css", encode: false }
     );
   });
 
@@ -33,10 +30,7 @@ describe("options", () => {
       background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
       background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
       `,
-      {
-        encode: false,
-        path: "./fixtures"
-      }
+      { from: 'input.css', path: "./fixtures", encode: false }
     );
   });
 
@@ -51,11 +45,7 @@ describe("options", () => {
       background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
       background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
       `,
-      {
-        encode: false,
-        from: "./fixtures/deeper/index.css",
-        path: "./fixtures"
-      }
+      { from: "./fixtures/deeper/index.css", path: "./fixtures", encode: false }
     );
   });
 
@@ -63,9 +53,7 @@ describe("options", () => {
     return compare(
       `background: svg-load('fixtures/basic.svg');`,
       `background: url("data:image/svg+xml;charset=utf-8,%3Csvg id='basic'/%3E");`,
-      {
-        xmlns: false
-      }
+      { from: 'input.css', xmlns: false }
     );
   });
 
@@ -73,9 +61,7 @@ describe("options", () => {
     return compare(
       `background: svg-load('fixtures/basic-with-xmlns.svg');`,
       `background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic-with-xmls'/>");`,
-      {
-        encode: false
-      }
+      { from: 'input.css', encode: false }
     );
   });
 
@@ -93,6 +79,7 @@ describe("options", () => {
       background: url(basic.svg: transformed content);
       `,
       {
+        from: 'input.css',
         encode: false,
         xmlns: false,
         transform(result, file) {
@@ -114,7 +101,7 @@ describe("options", () => {
       background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/%3E");
       background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/%3E");
       `,
-      {}
+      { from: 'input.css' }
     );
   });
 
@@ -130,6 +117,7 @@ describe("options", () => {
       background: url("data:image/svg+xml;charset=utf-8,1234567890");
       `,
       {
+        from: 'input.css',
         encode(code) {
           expect(code).toEqual(
             `<svg xmlns="http://www.w3.org/2000/svg" id="basic"/>`
@@ -145,6 +133,7 @@ describe("options", () => {
       `background: svg-load('fixtures/basic.svg');`,
       `background: url([transform: encode]);`,
       {
+        from: 'input.css',
         encode() {
           return "encode";
         },
@@ -160,6 +149,7 @@ describe("options", () => {
       `background: svg-load('fixtures/fill.svg', fill="#fff");`,
       `background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' fill='#fff'> <path/> </svg>");`,
       {
+        from: 'input.css',
         removeFill: true,
         encode: false
       }
@@ -177,6 +167,7 @@ describe("options", () => {
       background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' fill='#fff'> <rect/> </svg>");
       `,
       {
+        from: 'input.css',
         removeFill: /-icon/,
         encode: false
       }
