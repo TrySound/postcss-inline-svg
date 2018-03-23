@@ -65,7 +65,7 @@ describe('options', () => {
             `background: svg-load('fixtures/basic.svg');`,
             `background: url("data:image/svg+xml;charset=utf-8,%3Csvg id='basic'/%3E");`,
             {
-                xmlnsize: false
+                xmlns: false
             }
         );
     });
@@ -95,7 +95,7 @@ describe('options', () => {
             `,
             {
                 encode: false,
-                xmlnsize: false,
+                xmlns: false,
                 transform(result, file) {
                     assert.equal(result, '<svg id="basic" fill="#fff"/>');
                     return file.split(/\\|\//).pop() + ': transformed content';

@@ -83,6 +83,13 @@ function encode(code) {
 
 Transforms svg after `encode` function and generates url.
 
+#### options.xmlns
+
+type: boolean  
+default: true
+
+Adds `xmlns` attribute to svg if not present
+
 
 ## Frequently asked questions
 

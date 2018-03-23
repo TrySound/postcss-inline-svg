@@ -1,6 +1,6 @@
 import { readFile } from 'fs';
 import render from './render.js';
-import { transform, encode, xmlnsize } from './defaults.js';
+import { transform, encode, addXmlns } from './defaults.js';
 import { removeFill, applyRootParams, applySelectedParams } from './processors.js';
 
 function read(id) {
@@ -24,8 +24,8 @@ export default function load(id, params, selectors, opts) {
     return read(id).then(data => {
         let code = render(data, ...processors);
 
-        if (opts.xmlnsize !== false) {
-            code = (opts.xmlnsize || xmlnsize)(code);
+        if (opts.xmlns !== false) {
+            code = addXmlns(code);
         }
 
         if (opts.encode !== false) {

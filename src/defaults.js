@@ -7,7 +7,7 @@ export function encode(code) {
         .replace(/#/g, '%23');
 }
 
-export function xmlnsize(code) {
+export function addXmlns(code) {
     if (code.indexOf('xmlns') === -1) {
         return code
             .replace(/<svg/g, '<svg xmlns="http://www.w3.org/2000/svg"');
