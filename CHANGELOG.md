@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.1.0
+
+* Added `xmlns` option to add xmlns attribute if not present
+
 ## 3.0.0
 
 * Upgrade to postcss 6
