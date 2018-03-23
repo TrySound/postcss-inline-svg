@@ -17,7 +17,6 @@
     "build": "rollup -c",
     "pretest": "yarn build",
     "test": "jest",
-    "posttest": "eslint src test",
     "prepublish": "yarn build"
   },
   "lint-staged": {
@@ -46,19 +45,19 @@
   },
   "homepage": "https://github.com/TrySound/postcss-inline-svg",
   "dependencies": {
-    "css-select": "^1.2.0",
+    "css-select": "^2.0.0",
     "dom-serializer": "^0.1.0",
     "htmlparser2": "^3.9.0",
-    "postcss": "^6.0.1",
+    "postcss": "^6.0.21",
     "postcss-value-parser": "^3.2.3"
   },
   "devDependencies": {
-    "babel-preset-env": "^1.4.0",
+    "babel-preset-env": "^1.6.1",
     "husky": "^0.14.3",
-    "jest": "^20.0.1",
+    "jest": "^22.4.3",
     "lint-staged": "^7.0.0",
     "prettier": "^1.11.1",
-    "rollup": "^0.34.10",
-    "rollup-plugin-babel": "^2.7.1"
+    "rollup": "^0.57.1",
+    "rollup-plugin-babel": "^3.0.3"
   }
 }

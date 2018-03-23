@@ -1,5 +1,5 @@
 /* eslint-env mocha */
-const compare = require('./utils/compare.js');
+const { compare } = require('./utils.js');
 
 process.chdir(__dirname);
 
