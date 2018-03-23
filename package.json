@@ -15,9 +15,10 @@
   ],
   "scripts": {
     "build": "rollup -c",
-    "pretest": "rollup -c",
+    "pretest": "yarn build",
     "test": "jest --coverage",
-    "posttest": "eslint src test"
+    "posttest": "eslint src test",
+    "prepublish": "yarn build"
   },
   "jest": {
     "coverageDirectory": "coverage"
