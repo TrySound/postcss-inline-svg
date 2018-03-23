@@ -9,19 +9,21 @@
     "svg",
     "inline"
   ],
-  "main": "dist/postcss-inline-svg.js",
+  "main": "dist/index.js",
   "files": [
     "dist"
   ],
   "scripts": {
     "build": "rollup -c",
     "pretest": "yarn build",
-    "test": "jest --coverage",
+    "test": "jest",
     "posttest": "eslint src test",
     "prepublish": "yarn build"
   },
-  "jest": {
-    "coverageDirectory": "coverage"
+  "lint-staged": {
+    "*.{js,md}": [
+      "prettier --write"
+    ]
   },
   "babel": {
     "presets": [
@@ -35,17 +37,6 @@
         }
       ]
     ]
-  },
-  "eslintConfig": {
-    "extends": "postcss",
-    "rules": {
-      "quotes": [
-        0
-      ],
-      "max-len": [
-        0
-      ]
-    }
   },
   "author": "Bogdan Chadkin <trysound@yandex.ru>",
   "license": "MIT",
@@ -63,9 +54,10 @@
   },
   "devDependencies": {
     "babel-preset-env": "^1.4.0",
-    "eslint": "^3.4.0",
-    "eslint-config-postcss": "^2.0.0",
+    "husky": "^0.14.3",
     "jest": "^20.0.1",
+    "lint-staged": "^7.0.0",
+    "prettier": "^1.11.1",
     "rollup": "^0.34.10",
     "rollup-plugin-babel": "^2.7.1"
   }
