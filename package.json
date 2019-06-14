@@ -9,32 +9,16 @@
     "svg",
     "inline"
   ],
-  "main": "dist/index.js",
+  "main": "lib/index.js",
   "files": [
-    "dist"
+    "lib"
   ],
   "scripts": {
-    "build": "rollup -c",
-    "pretest": "yarn build",
-    "test": "jest",
-    "prepublish": "yarn build"
+    "test": "jest"
   },
   "lint-staged": {
     "*.{js,md}": [
       "prettier --write"
-    ]
-  },
-  "babel": {
-    "presets": [
-      [
-        "env",
-        {
-          "targets": {
-            "node": 4
-          },
-          "modules": false
-        }
-      ]
     ]
   },
   "author": "Bogdan Chadkin <trysound@yandex.ru>",
@@ -52,12 +36,9 @@
     "postcss-value-parser": "^3.2.3"
   },
   "devDependencies": {
-    "babel-preset-env": "^1.6.1",
     "husky": "^0.14.3",
     "jest": "^22.4.3",
     "lint-staged": "^7.0.0",
-    "prettier": "^1.11.1",
-    "rollup": "^0.57.1",
-    "rollup-plugin-babel": "^3.0.3"
+    "prettier": "^1.11.1"
   }
 }
