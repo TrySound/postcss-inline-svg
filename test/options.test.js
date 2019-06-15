@@ -18,7 +18,7 @@ test('should take file relatively to "from" option', () => {
   );
 });
 
-test('should take file relatively to "path" option', () => {
+test('should take file relatively to "paths" option', () => {
   return compare(
     `
     @svg-load icon url(basic.svg) {}
@@ -29,11 +29,11 @@ test('should take file relatively to "path" option', () => {
     background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
     background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
     `,
-    { from: "input.css", path: "./fixtures", encode: false }
+    { from: "input.css", paths: ["./fixtures"], encode: false }
   );
 });
 
-test('should prefer "path" option over "from"', () => {
+test('should find existing path from "paths" option', () => {
   return compare(
     `
     @svg-load icon url(basic.svg) {}
@@ -44,7 +44,30 @@ test('should prefer "path" option over "from"', () => {
     background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
     background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
     `,
-    { from: "./fixtures/deeper/index.css", path: "./fixtures", encode: false }
+    {
+      from: "input.css",
+      paths: ["./does_not_exist", "./fixtures"],
+      encode: false
+    }
+  );
+});
+
+test('should prefer "paths" option over "from"', () => {
+  return compare(
+    `
+    @svg-load icon url(basic.svg) {}
+    background: svg-load('basic.svg');
+    background: svg-inline(icon);
+    `,
+    `
+    background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
+    background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
+    `,
+    {
+      from: "./fixtures/deeper/index.css",
+      paths: ["./fixtures"],
+      encode: false
+    }
   );
 });
 

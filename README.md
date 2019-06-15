@@ -51,9 +51,9 @@ See [PostCSS] docs for examples for your environment.
 
 ### Options
 
-#### options.path
+#### options.paths
 
-Path to resolve URL.
+Array of paths to resolve URL. Paths are tried in order, until an existing file is found.
 
 Default: `false` - path will be relative to source file if it was specified.
 
@@ -85,7 +85,7 @@ Transforms SVG after `encode` function and generates URL.
 
 #### options.xmlns
 
-type: boolean  
+type: boolean
 default: true
 
 Adds `xmlns` attribute to SVG if not present.
