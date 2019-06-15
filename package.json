@@ -16,9 +16,15 @@
   "scripts": {
     "test": "jest"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "lint-staged": {
-    "*.{js,md}": [
-      "prettier --write"
+    "*.js": [
+      "prettier --write",
+      "git add"
     ]
   },
   "author": "Bogdan Chadkin <trysound@yandex.ru>",
@@ -29,16 +35,16 @@
   },
   "homepage": "https://github.com/TrySound/postcss-inline-svg",
   "dependencies": {
-    "css-select": "^2.0.0",
-    "dom-serializer": "^0.1.0",
-    "htmlparser2": "^3.9.0",
-    "postcss": "^6.0.21",
-    "postcss-value-parser": "^3.2.3"
+    "css-select": "^2.0.2",
+    "dom-serializer": "^0.1.1",
+    "htmlparser2": "^3.10.1",
+    "postcss": "^7.0.17",
+    "postcss-value-parser": "^4.0.0"
   },
   "devDependencies": {
-    "husky": "^0.14.3",
-    "jest": "^22.4.3",
-    "lint-staged": "^7.0.0",
-    "prettier": "^1.11.1"
+    "husky": "^2.4.1",
+    "jest": "^24.8.0",
+    "lint-staged": "^8.2.1",
+    "prettier": "^1.18.2"
   }
 }
