@@ -6,7 +6,7 @@
 [travis-img]: https://travis-ci.org/TrySound/postcss-inline-svg.svg
 [travis]: https://travis-ci.org/TrySound/postcss-inline-svg
 
-```css
+```postcss
 @svg-load nav url(img/nav.svg) {
     fill: #cfc;
     path:nth-child(2) {
@@ -32,7 +32,7 @@
 
 PostCSS parsers allow to use different syntax (but only one syntax in one svg-load() definition):
 
-```css
+```postcss
 .up {
     background: svg-load('img/arrow-up.svg', fill: #000, stroke: #fff);
 }
@@ -53,18 +53,18 @@ See [PostCSS] docs for examples for your environment.
 
 #### options.path
 
-Path to resolve url.
+Path to resolve URL.
 
 Default: `false` - path will be relative to source file if it was specified.
 
 #### options.removeFill
 
 Default: `false` - with `true` removes all `fill` attributes before applying specified.
-Passed RegExp filters files by id.
+Passed RegExp filters files by ID.
 
 #### options.encode(svg)
 
-Processes svg after applying parameters. Default will be ommited if passed `false`.
+Processes SVG after applying parameters. Default will be ommited if passed `false`.
 
 Default:
 
@@ -81,14 +81,14 @@ function encode(code) {
 
 #### options.transform(svg, path)
 
-Transforms svg after `encode` function and generates url.
+Transforms SVG after `encode` function and generates URL.
 
 #### options.xmlns
 
 type: boolean  
 default: true
 
-Adds `xmlns` attribute to svg if not present
+Adds `xmlns` attribute to SVG if not present.
 
 
 ## Frequently asked questions
@@ -120,9 +120,7 @@ There are three solutions: to remove that attribute (preferable), to use extende
 
 > There is a plugin. :)
 
-You are able to add [postcss-svgo](https://github.com/ben-eb/postcss-svgo) in your postcss plugins list
-which will detect every url which contains data svg uri and
-minify via [svgo](https://github.com/svg/svgo).
+You are able to add [postcss-svgo](https://github.com/cssnano/cssnano/tree/master/packages/postcss-svgo) in your PostCSS plugins list which will detect every URL which contains data SVG URI and minify via [svgo](https://github.com/svg/svgo).
 
 ```js
 postcss([
@@ -131,7 +129,7 @@ postcss([
 ])
 ```
 
-Or if you use [cssnano](https://github.com/ben-eb/cssnano) your svg urls already minified
+Or if you use [cssnano](https://cssnano.co/) your SVG URLs already minified
 as cssnano includes postcss-svgo.
 
 ```js
