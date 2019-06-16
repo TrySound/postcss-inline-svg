@@ -1,5 +1,12 @@
 # Changelog
 
+## 4.0.0
+
+* Option `path` was replaced with `paths`. Allows to specify multiple paths for URL resolve.
+* Default `encode` function now escapes curly brackets.
+* Dropped Node.js 6 support. Node.js 8.7.0 or greater is now required.
+* Upgraded to PostCSS 7.
+
 ## 3.1.0
 
 * Added `xmlns` option to add xmlns attribute if not present
