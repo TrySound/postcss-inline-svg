@@ -62,6 +62,12 @@ Default: `false` - path will be relative to source file if it was specified.
 Default: `false` - with `true` removes all `fill` attributes before applying specified.
 Passed RegExp filters files by ID.
 
+#### options.removeStroke
+
+Default: `false` - with `true` removes all `stroke` attributes before applying specified.
+Passed RegExp filters files by ID.
+
+
 #### options.encode(svg)
 
 Processes SVG after applying parameters. Default will be ommited if passed `false`.
