@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.1.0
+
+* Added `removeStroke` option.
+
 ## 4.0.0
 
 * Option `path` was replaced with `paths`. Allows to specify multiple paths for URL resolve.
