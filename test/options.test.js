@@ -195,3 +195,33 @@ test("should remove fill attributes with removeFill: RegExp", () => {
     }
   );
 });
+
+test("should remove stroke attributes with removeStroke: true", () => {
+  return compare(
+    `background: svg-load('fixtures/stroke.svg', stroke="#fff");`,
+    `background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' stroke='#fff'> <path/> </svg>");`,
+    {
+      from: "input.css",
+      removeStroke: true,
+      encode: false
+    }
+  );
+});
+
+test("should remove stroke attributes with removeStroke: RegExp", () => {
+  return compare(
+    `
+    background: svg-load('fixtures/stroke.svg', stroke="#fff");
+    background: svg-load('fixtures/stroke-icon.svg', stroke="#fff");
+    `,
+    `
+    background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' stroke='#fff'> <path stroke='#000'/> </svg>");
+    background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' stroke='#fff'> <rect/> </svg>");
+    `,
+    {
+      from: "input.css",
+      removeStroke: /-icon/,
+      encode: false
+    }
+  );
+});
