@@ -57,6 +57,12 @@ Array of paths to resolve URL. Paths are tried in order, until an existing file 
 
 Default: `false` - path will be relative to source file if it was specified.
 
+#### options.resolvePath(file, url, opts)
+
+Function that returns custom resolved path.
+
+Default: `undefined` - path will be calculated according to the `options.paths`.
+
 #### options.removeFill
 
 Default: `false` - with `true` removes all `fill` attributes before applying specified.
