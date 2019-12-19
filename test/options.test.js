@@ -1,4 +1,5 @@
 /* eslint-env mocha */
+const { resolve } = require("path");
 const { compare } = require("./utils.js");
 
 process.chdir(__dirname);
@@ -30,6 +31,25 @@ test('should take file relatively to "paths" option', () => {
     background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
     `,
     { from: "input.css", paths: ["./fixtures"], encode: false }
+  );
+});
+
+test('should resolve file using "paths" option as a function', () => {
+  return compare(
+    `
+    @svg-load icon url(basic.svg) {}
+    background: svg-load('basic.svg');
+    background: svg-inline(icon);
+    `,
+    `
+    background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
+    background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
+    `,
+    {
+      from: "input.css",
+      paths: (file, url, opts) => resolve("fixtures", url),
+      encode: false
+    }
   );
 });
 
