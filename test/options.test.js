@@ -1,4 +1,5 @@
 /* eslint-env mocha */
+const { resolve } = require("path");
 const { compare } = require("./utils.js");
 
 process.chdir(__dirname);
@@ -66,6 +67,44 @@ test('should prefer "paths" option over "from"', () => {
     {
       from: "./fixtures/deeper/index.css",
       paths: ["./fixtures"],
+      encode: false
+    }
+  );
+});
+
+test('should fallback to relative option if "paths" option can\'t be resolved', () => {
+  return compare(
+    `
+    @svg-load icon url(fixtures/basic.svg) {}
+    background: svg-load('fixtures/basic.svg');
+    background: svg-inline(icon);
+    `,
+    `
+    background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
+    background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
+    `,
+    {
+      from: "input.css",
+      paths: ["./does_not_exist"],
+      encode: false
+    }
+  );
+});
+
+test('should resolve file path using the "resolve" option function', () => {
+  return compare(
+    `
+    @svg-load icon url(basic.svg) {}
+    background: svg-load('basic.svg');
+    background: svg-inline(icon);
+    `,
+    `
+    background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
+    background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
+    `,
+    {
+      from: "input.css",
+      resolve: (file, url, opts) => resolve("fixtures", url),
       encode: false
     }
   );
