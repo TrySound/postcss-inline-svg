@@ -91,6 +91,25 @@ test('should prefer "paths" option over "from"', () => {
   );
 });
 
+test('should fallback to relative option if "paths" option can\'t be resolved', () => {
+  return compare(
+    `
+    @svg-load icon url(fixtures/basic.svg) {}
+    background: svg-load('fixtures/basic.svg');
+    background: svg-inline(icon);
+    `,
+    `
+    background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
+    background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
+    `,
+    {
+      from: "input.css",
+      paths: ["./does_not_exist"],
+      encode: false
+    }
+  );
+});
+
 test("should ignore xmlns absence", () => {
   return compare(
     `background: svg-load('fixtures/basic.svg');`,
