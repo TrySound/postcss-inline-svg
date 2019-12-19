@@ -53,18 +53,24 @@ See [PostCSS] docs for examples for your environment.
 
 #### options.paths
 
-Array of paths or function to resolve URL. Array paths are tried in order, until an existing file is found.
+Array of paths to resolve URL. Array paths are tried in order, until an existing file is found or will fallback to using the relative path.
+
+Default: `false` - path will be relative to source file if it was specified.
+
+#### options.resolve
+
+Function to resolve URL. This option will override the default file id resolver that uses "paths" option.
 Function recieves `file`, `url`, and `opts` arguments and expects to return an absolute path as a `string`.
 
 For example
 
 ```js
-function paths(file, url, opts) {
-    return path.resolve('svgs', url);
+function resolve(file, url, opts) {
+    return path.resolve('svg-folder', url);
 }
 ```
 
-Default: `false` - path will be relative to source file if it was specified.
+Default: `function` - internal resolver using "paths" option and relative path.
 
 #### options.removeFill
 

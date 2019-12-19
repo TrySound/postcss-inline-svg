@@ -34,25 +34,6 @@ test('should take file relatively to "paths" option', () => {
   );
 });
 
-test('should resolve file using "paths" option as a function', () => {
-  return compare(
-    `
-    @svg-load icon url(basic.svg) {}
-    background: svg-load('basic.svg');
-    background: svg-inline(icon);
-    `,
-    `
-    background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
-    background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
-    `,
-    {
-      from: "input.css",
-      paths: (file, url, opts) => resolve("fixtures", url),
-      encode: false
-    }
-  );
-});
-
 test('should find existing path from "paths" option', () => {
   return compare(
     `
@@ -105,6 +86,25 @@ test('should fallback to relative option if "paths" option can\'t be resolved', 
     {
       from: "input.css",
       paths: ["./does_not_exist"],
+      encode: false
+    }
+  );
+});
+
+test('should resolve file path using the "resolve" option function', () => {
+  return compare(
+    `
+    @svg-load icon url(basic.svg) {}
+    background: svg-load('basic.svg');
+    background: svg-inline(icon);
+    `,
+    `
+    background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
+    background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
+    `,
+    {
+      from: "input.css",
+      resolve: (file, url, opts) => resolve("fixtures", url),
       encode: false
     }
   );
