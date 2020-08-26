@@ -36,8 +36,8 @@
   "homepage": "https://github.com/TrySound/postcss-inline-svg",
   "dependencies": {
     "css-select": "^2.0.2",
-    "dom-serializer": "^0.1.1",
-    "htmlparser2": "^3.10.1",
+    "dom-serializer": "^1.0.1",
+    "htmlparser2": "^4.1.0",
     "postcss": "^7.0.17",
     "postcss-value-parser": "^4.0.0"
   },
