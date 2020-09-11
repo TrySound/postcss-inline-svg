@@ -55,6 +55,14 @@ test("should compile fill and stroke param", () => {
   );
 });
 
+test("should compile currentColor param", () => {
+  return compare(
+    `background: svg-load('fixtures/current-color-fill.svg', currentColor=#fff);`,
+    `background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\'> <path fill='#fff'/> </svg>");`,
+    { from: "input.css", encode: false }
+  );
+});
+
 test("should compile fill param with colon syntax", () => {
   return compare(
     `background: svg-load('fixtures/basic.svg', fill: #fff);`,
