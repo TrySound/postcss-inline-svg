@@ -24,8 +24,8 @@ test("should stringify all values after ast transformation", () => {
     background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>");
     `,
     { from: "input.css", encode: false }
-  ).then(result => {
-    result.root.walkDecls(decl => {
+  ).then((result) => {
+    result.root.walkDecls((decl) => {
       expect(typeof decl.value).toEqual("string");
     });
   });
@@ -50,14 +50,14 @@ test("should add message about dependency", () => {
     background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>")
     `,
     { from: "input.css", encode: false }
-  ).then(result => {
+  ).then((result) => {
     const messages = result.messages
-      .filter(message => message.type === "dependency")
-      .map(message => [message.file, message.parent])
+      .filter((message) => message.type === "dependency")
+      .map((message) => [message.file, message.parent])
       .sort();
     expect(messages).toEqual([
       [path.resolve("fixtures/basic-black.svg"), path.resolve("input.css")],
-      [path.resolve("fixtures/basic.svg"), path.resolve("input.css")]
+      [path.resolve("fixtures/basic.svg"), path.resolve("input.css")],
     ]);
   });
 });
@@ -75,12 +75,12 @@ test("should not add message about not found dependency", () => {
     { from: "input.css", encode: false },
     [
       `Can't load '${path.resolve("fixtures/not-found.svg")}'`,
-      `Can't load '${path.resolve("fixtures/not-found.svg")}'`
+      `Can't load '${path.resolve("fixtures/not-found.svg")}'`,
     ]
-  ).then(result => {
+  ).then((result) => {
     const messages = result.messages
-      .filter(message => message.type === "dependency")
-      .map(message => message.file)
+      .filter((message) => message.type === "dependency")
+      .map((message) => message.file)
       .sort();
     expect(messages).toEqual([]);
   });
@@ -96,14 +96,14 @@ test("should add parent in dependency message if specified", () => {
     background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic'/>")
     `,
     { from: "fixtures/file.css", encode: false }
-  ).then(result => {
+  ).then((result) => {
     const messages = result.messages
-      .filter(message => message.type === "dependency")
-      .map(message => message.parent)
+      .filter((message) => message.type === "dependency")
+      .map((message) => message.parent)
       .sort();
     expect(messages).toEqual([
       path.resolve("fixtures/file.css"),
-      path.resolve("fixtures/file.css")
+      path.resolve("fixtures/file.css"),
     ]);
   });
 });

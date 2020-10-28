@@ -32,7 +32,7 @@ test("should skip invalid syntax", () => {
     'Invalid "@svg-load" definition',
     'Invalid "@svg-load" definition',
     'Invalid "@svg-load" definition',
-    'Invalid "svg-inline()" statement'
+    'Invalid "svg-inline()" statement',
   ]);
 });
 
@@ -43,7 +43,7 @@ test("should skip if svg is not defined", () => {
   `;
   return compare(fixtures, fixtures, { from: "input.css", encode: false }, [
     '"icon" svg is not defined',
-    '"icon2" svg is not defined'
+    '"icon2" svg is not defined',
   ]);
 });
 
