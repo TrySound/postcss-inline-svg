@@ -4,7 +4,7 @@ const plugin = require("../");
 function compare(fixture, expected, options, warnings = []) {
   return postcss([plugin(options)])
     .process(fixture, options)
-    .then(result => {
+    .then((result) => {
       const resultWarnings = result.warnings();
       resultWarnings.forEach((warning, index) => {
         expect(warnings[index]).toEqual(warning.text);

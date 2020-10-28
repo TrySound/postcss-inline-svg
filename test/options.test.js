@@ -47,7 +47,7 @@ test('should find existing path from "paths" option', () => {
     {
       from: "input.css",
       paths: ["./does_not_exist", "./fixtures"],
-      encode: false
+      encode: false,
     }
   );
 });
@@ -66,7 +66,7 @@ test('should prefer "paths" option over "from"', () => {
     {
       from: "./fixtures/deeper/index.css",
       paths: ["./fixtures"],
-      encode: false
+      encode: false,
     }
   );
 });
@@ -107,7 +107,7 @@ test("should transform result svg into url", () => {
       transform(result, file) {
         expect(result).toEqual('<svg id="basic" fill="#fff"/>');
         return file.split(/\\|\//).pop() + ": transformed content";
-      }
+      },
     }
   );
 });
@@ -145,7 +145,7 @@ test("should encode result svg with custom encoder", () => {
           `<svg xmlns="http://www.w3.org/2000/svg" id="basic"/>`
         );
         return "1234567890";
-      }
+      },
     }
   );
 });
@@ -161,7 +161,7 @@ test('should combine results of "encode" and "transform"', () => {
       },
       transform(code) {
         return `[transform: ${code}]`;
-      }
+      },
     }
   );
 });
@@ -173,7 +173,7 @@ test("should remove fill attributes with removeFill: true", () => {
     {
       from: "input.css",
       removeFill: true,
-      encode: false
+      encode: false,
     }
   );
 });
@@ -191,7 +191,7 @@ test("should remove fill attributes with removeFill: RegExp", () => {
     {
       from: "input.css",
       removeFill: /-icon/,
-      encode: false
+      encode: false,
     }
   );
 });
@@ -203,7 +203,7 @@ test("should remove stroke attributes with removeStroke: true", () => {
     {
       from: "input.css",
       removeStroke: true,
-      encode: false
+      encode: false,
     }
   );
 });
@@ -221,7 +221,7 @@ test("should remove stroke attributes with removeStroke: RegExp", () => {
     {
       from: "input.css",
       removeStroke: /-icon/,
-      encode: false
+      encode: false,
     }
   );
 });
