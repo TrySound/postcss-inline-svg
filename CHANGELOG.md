@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.0.0
+
+* Migrated to PostCSS 8.
+* Dropped Node.js 8 support.
+
 ## 4.1.0
 
 * Added `removeStroke` option.
