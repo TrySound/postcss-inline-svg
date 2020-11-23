@@ -21,7 +21,7 @@ test("should skip unexpected function syntax", () => {
     `Invalid "svg-load()" statement`,
     `Expected parameter`,
     `Invalid "svg-load(a'fixtures/basic.svg')" definition`,
-    `Invalid "svg-load(,'fixtures/basic.svg')" definition`
+    `Invalid "svg-load(,'fixtures/basic.svg')" definition`,
   ]);
 });
 
@@ -86,7 +86,7 @@ test("should skip param with unexpected separator", () => {
     'Expected ":" separator in "fill::#fff"',
     'Expected ":" or "=" separator in "fill #fff"',
     'Expected ":" or "=" separator in "fill-#fff"',
-    'Expected ":" or "=" separator in "fn()"'
+    'Expected ":" or "=" separator in "fn()"',
   ]);
 });
 

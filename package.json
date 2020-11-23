@@ -1,6 +1,6 @@
 {
   "name": "postcss-inline-svg",
-  "version": "4.1.0",
+  "version": "5.0.0",
   "description": "PostCSS plugin to reference an SVG file and control its attributes with CSS syntax",
   "keywords": [
     "postcss",
@@ -35,16 +35,19 @@
   },
   "homepage": "https://github.com/TrySound/postcss-inline-svg",
   "dependencies": {
-    "css-select": "^2.0.2",
-    "dom-serializer": "^0.1.1",
-    "htmlparser2": "^3.10.1",
-    "postcss": "^7.0.17",
+    "css-select": "^3.1.0",
+    "dom-serializer": "^1.1.0",
+    "htmlparser2": "^5.0.1",
     "postcss-value-parser": "^4.0.0"
   },
+  "peerDependencies": {
+    "postcss": "^8.1.4"
+  },
   "devDependencies": {
-    "husky": "^2.4.1",
-    "jest": "^24.8.0",
-    "lint-staged": "^8.2.1",
-    "prettier": "^1.18.2"
+    "husky": "^4.3.0",
+    "jest": "^26.6.1",
+    "lint-staged": "^10.5.0",
+    "postcss": "^8.1.4",
+    "prettier": "^2.1.2"
   }
 }
