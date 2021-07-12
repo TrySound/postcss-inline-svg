@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.0.1
+
+* Upgrades `css-select` to avoid pulling in `css-what@4.0.0` ([Github Advisory](https://github.com/advisories/GHSA-q8pj-2vqx-8ggc))
+
 ## 5.0.0
 
 * Migrated to PostCSS 8.
