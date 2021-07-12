@@ -1,6 +1,6 @@
 {
   "name": "postcss-inline-svg",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "PostCSS plugin to reference an SVG file and control its attributes with CSS syntax",
   "keywords": [
     "postcss",
