@@ -1,5 +1,6 @@
 /* eslint-env mocha */
 const { compare } = require("./utils.js");
+const cssVariables = require("postcss-css-variables");
 
 process.chdir(__dirname);
 
@@ -73,6 +74,30 @@ test("should rewrite root params", () => {
     background: svg-inline(icon);
     `,
     `
+    background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic-black' fill='#fff' stroke='#000'/>");
+    `,
+    { from: "input.css", encode: false }
+  );
+});
+
+test("should resolve root variables", () => {
+  return compare(
+    `
+    :root {
+      --black: #000;
+      --white: #fff;
+    }
+    @svg-load icon url(fixtures/basic-black.svg) {
+      fill: var(--white);
+      stroke: var(--black);
+    }
+    background: svg-inline(icon);
+    `,
+    `
+    :root {
+      --black: #000;
+      --white: #fff;
+    }
     background: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\'http://www.w3.org/2000/svg\' id='basic-black' fill='#fff' stroke='#000'/>");
     `,
     { from: "input.css", encode: false }
