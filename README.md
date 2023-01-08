@@ -1,10 +1,10 @@
-# postcss-inline-svg [![Build Status][travis-img]][travis]
+# postcss-inline-svg [![CI][build-badge-img]][ci]
 
 [PostCSS] plugin to reference an SVG file and control its attributes with CSS syntax.
 
 [PostCSS]: https://github.com/postcss/postcss
-[travis-img]: https://travis-ci.org/TrySound/postcss-inline-svg.svg
-[travis]: https://travis-ci.org/TrySound/postcss-inline-svg
+[build-badge-img]: https://github.com/TrySound/postcss-inline-svg/actions/workflows/nodejs.yml/badge.svg
+[ci]: https://github.com/TrySound/postcss-inline-svg/actions/workflows/nodejs.yml
 
 ```postcss
 @svg-load nav url(img/nav.svg) {
