@@ -1,5 +1,10 @@
 # Changelog
 
+## 6.0.0
+
+* Dropped Node.js 10 and 12 support.
+* Fixed security vulnerabilities in dependencies.
+
 ## 5.0.0
 
 * Migrated to PostCSS 8.
